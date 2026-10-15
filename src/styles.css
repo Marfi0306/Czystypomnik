@@ -25,3 +25,25 @@
 .scope-note strong{font-size:15px}.scope-note p{font-size:14px;line-height:1.9;margin-top:10px}.scope-note p:last-child{margin-top:9px}
 @media(max-width:800px){.trust-inner{gap:30px}.trust-inner>span{font-size:11px;gap:9px}.scope-note{padding:25px 20px}.scope-note p{font-size:13px}}
 @media(max-width:560px){.trust-inner{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;min-height:86px;padding-block:16px}.trust-inner>span{flex-direction:column;text-align:center;gap:7px;font-size:10px}.trust-inner svg{width:21px;height:21px}.hero{padding-bottom:30px}.hero-visual figcaption,.comparison-figure figcaption{font-size:9px}.scope-note{padding:23px 17px;margin-top:23px}.scope-note strong{font-size:14px}.scope-note p{font-size:13px;text-align:center}}
+
+/* Podpis i karta terminu mają osobne obszary: tekst nie może wejść pod kartę. */
+@media(max-width:1100px){
+  .season-tag{width:122px;right:-10px}
+  .season-tag strong{font-size:34px;white-space:nowrap}
+  .season-tag>span{letter-spacing:1px;white-space:nowrap}
+  .hero-caption{left:20px;right:132px;bottom:28px;gap:12px}
+  .hero-caption>div{min-width:0}
+  .hero-caption strong{display:block;font-size:24px;overflow-wrap:normal}
+  .caption-icon{font-size:32px;flex-shrink:0}
+}
+@media(max-width:560px){
+  .season-tag{width:112px;padding-inline:8px}
+  .season-tag strong{font-size:32px}
+  .hero-caption{left:18px;right:118px;bottom:26px;gap:10px}
+  .hero-caption strong{font-size:clamp(19px,5.6vw,24px)}
+  .caption-icon{font-size:28px}
+}
+@media(min-width:561px) and (max-width:800px){
+  .season-tag{top:20px;bottom:auto}
+  .hero-caption{right:20px;bottom:26px}
+}
