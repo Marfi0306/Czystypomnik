@@ -1,3 +1,5 @@
+> PROJEKT — SO SOCIAL potwierdzone jako strona umów i adresat korespondencji. Zgłoszenia pozostają wyłączone do czasu wyjaśnienia administratora danych oraz konfiguracji usług.
+
 # Prawo odstąpienia od umowy
 
 Wersja: 2026-10-16.

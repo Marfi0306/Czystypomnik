@@ -1,3 +1,5 @@
+> PROJEKT — SO SOCIAL potwierdzone jako strona umów i adresat korespondencji. Zgłoszenia pozostają wyłączone do czasu wyjaśnienia administratora danych oraz konfiguracji usług.
+
 # Regulamin zgłoszeń i świadczenia usług Czysty Pomnik
 
 Wersja: 2026-10-16. Dokument dotyczy oferty sezonowej 24–31 października 2026 r.
@@ -72,4 +74,4 @@ Klient może korzystać z pomocy rzecznika konsumentów i właściwych podmiotó
 
 ## 8. Dane i postanowienia końcowe
 
-Zasady wykorzystywania danych, w tym kontaktu telefonicznego, określa Polityka prywatności. Zmiana opublikowanego regulaminu nie zmienia warunków już zawartych umów bez właściwej podstawy i uzgodnienia. Wersję obowiązującą dla konkretnej umowy klient otrzymuje wraz z ofertą. W sprawach nieuregulowanych stosuje się prawo polskie z zachowaniem bezwzględnie obowiązującej ochrony konsumenta.
+Przed przyjmowaniem zgłoszeń zostanie przekazana kompletna Polityka prywatności określająca rzeczywistego administratora i zasady wykorzystywania danych, w tym kontaktu telefonicznego. Zmiana opublikowanego regulaminu nie zmienia warunków już zawartych umów bez właściwej podstawy i uzgodnienia. Wersję obowiązującą dla konkretnej umowy klient otrzymuje wraz z ofertą. W sprawach nieuregulowanych stosuje się prawo polskie z zachowaniem bezwzględnie obowiązującej ochrony konsumenta.
