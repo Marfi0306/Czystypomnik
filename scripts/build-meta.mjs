@@ -9,6 +9,6 @@ if(launch){
  html=html.replace('</head>',`<link rel="canonical" href="${escape(base)}/"/><meta property="og:url" content="${escape(base)}/"/><meta property="og:image" content="${escape(base)}/images/after.webp"/></head>`);
  await writeFile('dist/robots.txt',`User-agent: *\nDisallow: /admin\nDisallow: /api/\nSitemap: ${base}/sitemap.xml\n`);
  // Dokumenty mają treść w aplikacji; nie narzucamy im kanonicznej strony głównej.
- await writeFile('dist/sitemap.xml',`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${escape(base)}/</loc></url></urlset>`);
+ await writeFile('dist/sitemap.xml',`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${['/','/dokumenty/regulamin','/dokumenty/prywatnosc','/dokumenty/odstapienie','/dokumenty/cookies'].map(path=>'<url><loc>'+escape(base)+path+'</loc></url>').join('')}</urlset>`);
 }
 await writeFile('dist/index.html',html);
