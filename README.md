@@ -1,5 +1,7 @@
 # Czysty Pomnik
 
+Strona: https://czystypomnik.waw.pl/ · Panel: https://czystypomnik.waw.pl/admin
+
 Strona oferty pielęgnacji nagrobków w Warszawie. React, TypeScript i Vite; backend Express i Supabase.
 
 ## Uruchomienie

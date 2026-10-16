@@ -1,6 +1,6 @@
 Polityka prywatności Czysty Pomnik
 
-Wersja: 2026-10-16-v1. Dotyczy strony https://czystypomnik.vercel.app, zgłoszeń, kontaktu i świadczenia usług Czysty Pomnik.
+Wersja: 2026-10-16-v2. Dotyczy strony https://czystypomnik.waw.pl, zgłoszeń, kontaktu i świadczenia usług Czysty Pomnik.
 
 1. Administrator i kontakt
 

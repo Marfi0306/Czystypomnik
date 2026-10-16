@@ -1,6 +1,6 @@
 Informacja o cookies i pamięci przeglądarki
 
-Wersja: 2026-10-16-v1.
+Wersja: 2026-10-16-v2.
 
 1. Strona i formularz
 

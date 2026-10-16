@@ -3,7 +3,7 @@ import type {Config} from '../shared/domain';
 export const documentTitles:Record<string,string>={regulamin:'Regulamin zgłoszeń i usług',prywatnosc:'Polityka prywatności',odstapienie:'Prawo odstąpienia',cookies:'Informacja o cookies'};
 export function visibleDocument(config:Config,key:string,hostname=location.hostname){
  let text=config.documents[key]||'';
- if(config.mode==='demo'&&(key==='prywatnosc'||key==='cookies')){
+ if(!config.documentsApproved&&config.mode==='demo'&&(key==='prywatnosc'||key==='cookies')){
   const hosting=hostname.endsWith('.chatgpt.site')?'Podgląd jest udostępniany przez OpenAI Sites na chatgpt.site. Dostęp do niego może wymagać konta ChatGPT. Dostawca obsługuje dane techniczne połączenia i własne mechanizmy dostępu zgodnie ze swoimi warunkami: https://openai.com/policies/privacy-policy/.':hostname.endsWith('.vercel.app')?'Podgląd jest hostowany przez Vercel. Dostawca obsługuje techniczne informacje o połączeniu zgodnie ze swoimi warunkami: https://vercel.com/legal/privacy-policy.':'To podgląd aplikacji; dostawca użytego hostingu może przetwarzać techniczne informacje o połączeniu.';
   text=text+'\n\nHosting podglądu\n\n'+hosting;
  }

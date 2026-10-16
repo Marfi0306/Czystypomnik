@@ -49,5 +49,29 @@
       "path": "/api/internal/retention",
       "schedule": "0 3 * * *"
     }
+  ],
+  "redirects": [
+    {
+      "source": "/:path((?!api/internal(?:/|$)).*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "czystypomnik.vercel.app"
+        }
+      ],
+      "destination": "https://czystypomnik.waw.pl/:path",
+      "permanent": true
+    },
+    {
+      "source": "/:path((?!api/internal(?:/|$)).*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "czystypomnik-marfi1.vercel.app"
+        }
+      ],
+      "destination": "https://czystypomnik.waw.pl/:path",
+      "permanent": true
+    }
   ]
 }
