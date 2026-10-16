@@ -1,6 +1,6 @@
 Polityka prywatności Czysty Pomnik
 
-Wersja: 2026-10-16-v2. Dotyczy strony https://czystypomnik.waw.pl, zgłoszeń, kontaktu i świadczenia usług Czysty Pomnik.
+Wersja: 2026-10-16-v3. Dotyczy strony https://czystypomnik.waw.pl, zgłoszeń, kontaktu i świadczenia usług Czysty Pomnik.
 
 1. Administrator i kontakt
 
@@ -8,7 +8,7 @@ Administratorem danych osobowych jest SO SOCIAL spółka z ograniczoną odpowied
 
 2. Jakie informacje otrzymujemy
 
-Podajesz imię i nazwisko, telefon, adres e-mail, wybrany pakiet, preferowany dzień oraz lokalizację nagrobka i dane z tablicy ułatwiające jego identyfikację. Możesz dobrowolnie dodać numery kwatery, rzędu i grobu, uwagi oraz do trzech zdjęć. Przy zawieraniu i wykonywaniu umowy przetwarzamy także ofertę, korespondencję, oświadczenia, dane rozliczeniowe i dokumentację wykonania usługi. Dane otrzymujemy od Ciebie, a informacje o płatnościach również z rozliczeń bankowych i księgowych.
+Podajesz imię i nazwisko, telefon, adres e-mail, wybrany pakiet, preferowany dzień oraz lokalizację nagrobka i dane z tablicy ułatwiające jego identyfikację. Możesz dobrowolnie dodać numery kwatery, rzędu i grobu, uwagi oraz jedno zdjęcie. Przy zawieraniu i wykonywaniu umowy przetwarzamy także ofertę, korespondencję, oświadczenia, dane rozliczeniowe i dokumentację wykonania usługi. Dane otrzymujemy od Ciebie, a informacje o płatnościach również z rozliczeń bankowych i księgowych.
 
 Serwer hostingu przetwarza techniczne dane połączenia, m.in. adres IP, czas żądania, żądaną stronę i informacje o przeglądarce. Na potrzeby ograniczania nadużyć aplikacja zapisuje skrót adresu IP z kluczem serwera i licznik żądań. Nie zapisuje adresu IP w zgłoszeniu. Pracownikom udostępniamy dane logowania, historię czynności i informacje niezbędne do obsługi.
 
@@ -24,11 +24,11 @@ Nie wymagamy zgody marketingowej jako warunku zgłoszenia. Akceptacja regulaminu
 
 4. Odbiorcy danych
 
-Dostęp mają osoby obsługujące klientów i wykonujące usługę w zakresie potrzebnym do swoich zadań. Korzystamy z Vercel Inc. do hostingu strony i API oraz Supabase do bazy, prywatnego przechowywania zdjęć i uwierzytelniania panelu. Baza projektu i pliki znajdują się w regionie Frankfurt (eu-central-1). Korespondencję prowadzimy przez skrzynkę Gmail dostarczaną przez Google; wiadomości wysyła zespół, nie automat Resend. Dane mogą otrzymać także obsługa księgowa i prawna, banki oraz uprawnione organy, gdy wynika to z prawa lub jest niezbędne do realizacji sprawy. Nie sprzedajemy danych.
+Dostęp mają osoby obsługujące klientów i wykonujące usługę w zakresie potrzebnym do swoich zadań. Korzystamy z Vercel Inc. do hostingu strony i API oraz Supabase do bazy, prywatnego przechowywania zdjęć i uwierzytelniania panelu. Baza projektu i pliki znajdują się w regionie Frankfurt (eu-central-1). Korespondencję z klientami prowadzimy ręcznie przez skrzynkę Gmail dostarczaną przez Google. Do automatycznego wysyłania na firmową skrzynkę powiadomień o nowych zgłoszeniach korzystamy z Resend (Plus Five Five, Inc.). Powiadomienie zawiera dane kontaktowe klienta i informacje o wybranej usłudze oraz lokalizacji nagrobka, potrzebne obsłudze; nie zawiera załączonych zdjęć. Domena wysyłkowa Resend korzysta z regionu Ireland (eu-west-1). Dane mogą otrzymać także obsługa księgowa i prawna, banki oraz uprawnione organy, gdy wynika to z prawa lub jest niezbędne do realizacji sprawy. Nie sprzedajemy danych.
 
 5. Przekazywanie poza Europejski Obszar Gospodarczy
 
-Region bazy w Niemczech nie wyklucza przetwarzania przez globalnych dostawców i ich podwykonawców poza EOG, m.in. w USA. W zależności od dostawcy i transferu stosowane są decyzje Komisji Europejskiej stwierdzające odpowiedni poziom ochrony, w tym ramy EU–US Data Privacy Framework dla objętego nimi odbiorcy, albo standardowe klauzule umowne i wymagane środki uzupełniające. Informacji o właściwych zabezpieczeniach i sposobie uzyskania ich kopii udzielamy pod adresem kontaktowym administratora. Warunki dostawców: https://vercel.com/legal/dpa, https://supabase.com/legal/customer-resources/data-processing-addendum oraz https://policies.google.com/privacy?hl=pl.
+Region bazy w Niemczech nie wyklucza przetwarzania przez globalnych dostawców i ich podwykonawców poza EOG, m.in. w USA. W zależności od dostawcy i transferu stosowane są decyzje Komisji Europejskiej stwierdzające odpowiedni poziom ochrony, w tym ramy EU–US Data Privacy Framework dla objętego nimi odbiorcy, albo standardowe klauzule umowne i wymagane środki uzupełniające. Informacji o właściwych zabezpieczeniach i sposobie uzyskania ich kopii udzielamy pod adresem kontaktowym administratora. Warunki dostawców: https://vercel.com/legal/dpa, https://supabase.com/legal/customer-resources/data-processing-addendum https://policies.google.com/privacy?hl=pl oraz https://resend.com/legal/dpa. Region wysyłki w Irlandii nie oznacza, że wszystkie dane Resend pozostają w EOG; dostawca przewiduje również przetwarzanie w USA i stosowanie standardowych klauzul umownych.
 
 6. Okresy przechowywania
 
@@ -49,4 +49,3 @@ Podanie danych jest dobrowolne, lecz dane kontaktowe, wybór usługi, dzień i i
 9. Cookies i aktualizacje
 
 Nie korzystamy z reklamowych cookies, Meta Pixel ani zewnętrznych narzędzi analitycznych. Szczegóły pamięci przeglądarki i sesji panelu opisuje Informacja o cookies. Aktualną politykę publikujemy w stopce; wersję właściwą dla oferty otrzymasz wraz z warunkami e-mailem. Zmiana polityki nie rozszerza automatycznie celów przetwarzania wcześniej zebranych danych.
-

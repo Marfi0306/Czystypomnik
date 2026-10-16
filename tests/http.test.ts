@@ -12,5 +12,5 @@ test('bez konfiguracji API zwraca podgląd, nie odbiera zgłoszeń',async()=>{
 });
 test('API blokuje obce pochodzenie i nieuprawniony harmonogram',async()=>{
  const r=await fetch(base+'/api/orders',{method:'POST',headers:{origin:'https://example.invalid','content-type':'application/json'},body:'{}'});assert.equal(r.status,403);
- for(const route of ['outbox','retention']){const job=await fetch(base+'/api/internal/'+route,{method:'POST'});assert.equal(job.status,401);}
+ for(const route of ['outbox','retention','owner-notifications']){const job=await fetch(base+'/api/internal/'+route,{method:'POST'});assert.equal(job.status,401);}
 });

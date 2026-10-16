@@ -7,7 +7,7 @@ import { resolve } from 'node:path';
 import { z } from 'zod';
 import { createClient } from '@supabase/supabase-js';
 import { db, readySettings, rpc } from './db';
-import { processOutbox, messageFor } from './mail';
+import { processOutbox, messageFor, ownerDelivery } from './mail';
 import { orderSchema } from '../shared/domain';
 import { termsStatement } from '../shared/consent';
 import {offerSchema,contractSchema} from '../shared/offers';
@@ -169,6 +169,9 @@ app.post('/api/admin/outbox/:id/sent',origin,wrap(async(req,res)=>{
 }));
 app.post('/api/admin/outbox/:id/retry',origin,wrap(async(req,res)=>{const user=await actor(req);const id=z.uuid().parse(req.params.id);const {error}=await db!.from('outbox').update({state:'pending',attempts:0,next_attempt_at:new Date().toISOString()}).eq('id',id).eq('state','failed');if(error) throw new Error('DATABASE_UNAVAILABLE');await db!.from('history').insert({actor:user,event:'mail_retry',details:{id}});res.json({ok:true});}));
 app.post('/api/internal/outbox',wrap(async(req,res)=>{if(!process.env.CRON_SECRET||!same(req.get('authorization')||'',`Bearer ${process.env.CRON_SECRET}`)) throw new Error('UNAUTHORIZED');if(!await readySettings()) throw new Error('NOT_READY');res.json(await processOutbox());}));
+function ownerWorkerAuth(req:Request){if((process.env.OWNER_NOTIFY_SECRET||'').length<32||!same(req.get('authorization')||'',`Bearer ${process.env.OWNER_NOTIFY_SECRET}`))throw new Error('UNAUTHORIZED');}
+app.post('/api/internal/owner-notifications',wrap(async(req,res)=>{ownerWorkerAuth(req);if(!await readySettings())throw new Error('NOT_READY');res.json(await processOutbox(true));}));
+app.get('/api/internal/owner-notifications/:id',wrap(async(req,res)=>{ownerWorkerAuth(req);res.json(await ownerDelivery(z.uuid().parse(req.params.id)));}));
 app.all('/api/internal/retention',wrap(async(req,res)=>{if(!process.env.CRON_SECRET||!same(req.get('authorization')||'',`Bearer ${process.env.CRON_SECRET}`))throw new Error('UNAUTHORIZED');res.json(await runRetention());}));
 app.use('/api',(_req,res)=>{res.status(404).json({error:'NOT_FOUND'});});
 app.use(express.static(resolve('dist')));

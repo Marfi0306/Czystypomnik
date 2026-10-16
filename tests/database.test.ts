@@ -20,6 +20,7 @@ before(async()=>{
  await db.exec(await readFile(new URL('../supabase/migrations/003_attachment_limit.sql',import.meta.url),'utf8'));
  await db.exec(await readFile(new URL('../supabase/migrations/004_offers_and_retention.sql',import.meta.url),'utf8'));
  await db.exec(await readFile(new URL('../supabase/migrations/005_manual_mail.sql',import.meta.url),'utf8'));
+ await db.exec(await readFile(new URL('../supabase/migrations/20261016180000_owner_notifications.sql',import.meta.url),'utf8'));
  await db.query('insert into cemeteries(id,name,address) values($1,$2,$3),($4,$5,$6)',[c1,'Test A','Adres A',c2,'Test B','Adres B']);
  await db.exec(`update settings set ready=true,documents_version='test',business='{"email":"owner@example.invalid"}',documents='{"regulamin":"Test"}';`);
 });
@@ -86,4 +87,22 @@ test('ręczna wysyłka wymaga dowodu, zapisuje Message-ID i odrzuca powtórzenie
  await assert.rejects(()=>call('record_manual_mail',[id,'<received@example.invalid>',new Date().toISOString(),'test']),/INVALID_TRANSITION/);
  const owner=await db.query<{id:string}>("select id from outbox where order_id=$1 and kind='owner'",[o.id]);await call('record_manual_mail',[owner.rows[0].id,'dashboard',new Date().toISOString(),'test']);
  const state=await db.query<{state:string}>("select state from outbox where id=$1",[owner.rows[0].id]);assert.equal(state.rows[0].state,'cancelled');
+});
+
+test('automat pobiera tylko owner, chroni klientów i nie pobiera ponownie aktywnej blokady',async()=>{
+ await db.exec("update outbox set state='sent' where kind='owner'");
+ await day('2099-11-20',null);const o=await reserve(input(c1,'2099-11-20'));
+ await db.query("update outbox set recipient='czystypomnikwarszawa@gmail.com' where order_id=$1 and kind='owner'",[o.id]);
+ const jobs=await db.query<{id:string;kind:string;attempts:number}>('select * from claim_owner_outbox()');
+ assert.equal(jobs.rows.length,1);assert.equal(jobs.rows[0].kind,'owner');assert.equal(jobs.rows[0].attempts,1);
+ assert.equal((await db.query('select * from claim_owner_outbox()')).rows.length,0);
+ const client=await db.query<{state:string;attempts:number}>("select state,attempts from outbox where order_id=$1 and kind='received'",[o.id]);
+ assert.deepEqual(client.rows[0],{state:'pending',attempts:0});
+ await db.query("update outbox set locked_at=now()-interval '6 minutes' where id=$1",[jobs.rows[0].id]);
+ assert.equal((await db.query('select * from claim_owner_outbox()')).rows.length,1);
+ await db.query("update outbox set state='failed',next_attempt_at=now()+interval '1 hour' where id=$1",[jobs.rows[0].id]);
+ assert.equal((await db.query('select * from claim_owner_outbox()')).rows.length,0);
+ await db.query("update outbox set next_attempt_at=now()-interval '1 hour',attempts=8 where id=$1",[jobs.rows[0].id]);
+ assert.equal((await db.query('select * from claim_owner_outbox()')).rows.length,0);
+ await db.exec('set role anon');try{await assert.rejects(()=>db.query('select * from claim_owner_outbox()'),/permission denied/);}finally{await db.exec('reset role');}
 });

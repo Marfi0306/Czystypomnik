@@ -25,15 +25,18 @@ export function messageFor(kind:string,p:Record<string,any>){
  if(kind!=='owner')text+=`\nKontakt: ${company.email||'czystypomnikwarszawa@gmail.com'}, 693 429 991.\n`;
  return {subject,text};
 }
-export async function processOutbox() {
-  if (!db || !process.env.RESEND_API_KEY) throw new Error('NOT_READY');
-  const jobs = await rpc('claim_outbox'); let sent = 0;
+export const ownerRecipient = 'czystypomnikwarszawa@gmail.com';
+export async function processOutbox(ownerOnly = process.env.MAIL_MODE !== 'resend') {
+  if (!db || !process.env.RESEND_API_KEY || !process.env.MAIL_FROM) throw new Error('NOT_READY');
+  const jobs = await rpc(ownerOnly ? 'claim_owner_outbox' : 'claim_outbox'); let sent = 0;
   for (const job of jobs) {
     try {
+      if (ownerOnly && (job.kind !== 'owner' || job.recipient !== ownerRecipient)) throw new Error('MAIL_RECIPIENT_DENIED');
       const mail = messageFor(job.kind, job.payload);
-      const response = await fetch('https://api.resend.com/emails', { method: 'POST', headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json', 'Idempotency-Key': job.id }, body: JSON.stringify({ from: process.env.MAIL_FROM, reply_to:process.env.MAIL_REPLY_TO||'czystypomnikwarszawa@gmail.com', to: [job.recipient], ...mail }), signal: AbortSignal.timeout(20000) });
+      const response = await fetch('https://api.resend.com/emails', { method: 'POST', headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json', 'Idempotency-Key': job.id }, body: JSON.stringify({ from: process.env.MAIL_FROM, reply_to:process.env.MAIL_REPLY_TO||ownerRecipient, to: [job.kind === 'owner' ? ownerRecipient : job.recipient], ...mail }), signal: AbortSignal.timeout(15000) });
       if (!response.ok) throw new Error(`MAIL_HTTP_${response.status}`);
       const result = await response.json() as {id: string};
+      if (!result.id) throw new Error('MAIL_PROVIDER_RESPONSE');
       const { error } = await db.from('outbox').update({ state: 'sent', provider_id: result.id, last_error: null }).eq('id', job.id);
       if (error) throw new Error('MAIL_STATE_UPDATE');
       sent++;
@@ -42,4 +45,16 @@ export async function processOutbox() {
     }
   }
   return { processed: jobs.length, sent };
+}
+
+// Only the owner worker can query delivery; do not expose message contents.
+export async function ownerDelivery(id:string) {
+ if(!db || !process.env.RESEND_API_KEY)throw new Error('NOT_READY');
+ const {data,error}=await db.from('outbox').select('kind,recipient,state,provider_id').eq('id',id).single();
+ if(error || data?.kind!=='owner' || data.recipient!==ownerRecipient)throw new Error('NOT_FOUND');
+ if(data.state!=='sent' || !data.provider_id)return {state:data.state,event:null};
+ const r=await fetch('https://api.resend.com/emails/'+encodeURIComponent(data.provider_id),{headers:{Authorization:`Bearer ${process.env.RESEND_API_KEY}`},signal:AbortSignal.timeout(10000)});
+ if(!r.ok)throw new Error('MAIL_DELIVERY_HTTP_'+r.status);
+ const result=await r.json() as {last_event?:string};
+ return {state:data.state,event:result.last_event||null};
 }
