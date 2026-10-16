@@ -40,5 +40,14 @@
         }
       ]
     }
+  ],
+  "regions": [
+    "fra1"
+  ],
+  "crons": [
+    {
+      "path": "/api/internal/retention",
+      "schedule": "0 3 * * *"
+    }
   ]
 }

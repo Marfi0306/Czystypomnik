@@ -11,7 +11,7 @@ export function visibleDocument(config:Config,key:string,hostname=location.hostn
 }
 function Paragraph({text}:{text:string}){return <>{text.split(/(https?:\/\/[^\s)]+)/).map((s,i)=>/^https?:\/\//.test(s)?<a key={i} href={s.replace(/[.,;]+$/,'')} target="_blank" rel="noreferrer">{s}</a>:s)}</>;}
 export default function Legal({config,doc}:{config:Config;doc:string}){
- const text=visibleDocument(config,doc);const title=documentTitles[doc];const draft=config.mode==='demo'&&['regulamin','odstapienie'].includes(doc);
+ const text=visibleDocument(config,doc);const title=documentTitles[doc];const draft=!config.documentsApproved&&config.mode==='demo'&&['regulamin','odstapienie'].includes(doc);
  useEffect(()=>{document.title=(title||'Dokument')+' — Czysty Pomnik';const canonical=document.querySelector<HTMLLinkElement>('link[rel=canonical]');if(canonical)canonical.href=location.origin+location.pathname;},[title]);
  return <section className="container legal"><p className="eyebrow">CZYSTY POMNIK · DOKUMENTY</p><h1>{title||'Nie znaleziono dokumentu'}</h1>
  <nav className="legal-nav" aria-label="Dokumenty">{Object.entries(documentTitles).map(([key,name])=><a key={key} href={'/dokumenty/'+key} aria-current={doc===key?'page':undefined}>{name}</a>)}</nav>

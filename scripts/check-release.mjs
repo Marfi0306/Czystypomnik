@@ -1,6 +1,8 @@
 // Weryfikacja nie wypisuje wartości sekretów i nie uruchamia sprzedaży.
-const required=['APP_ORIGIN','SUPABASE_URL','SUPABASE_SERVICE_ROLE_KEY','RESEND_API_KEY','MAIL_FROM','MAIL_REPLY_TO','ADMIN_EMAILS','COOKIE_SECRET','UPLOAD_SECRET','IP_HASH_SECRET','CRON_SECRET'];
+const required=['APP_ORIGIN','SUPABASE_URL','SUPABASE_SERVICE_ROLE_KEY','MAIL_REPLY_TO','ADMIN_EMAILS','COOKIE_SECRET','UPLOAD_SECRET','IP_HASH_SECRET','CRON_SECRET'];
 const missing=required.filter(k=>!process.env[k]);
+if(!['manual','resend'].includes(process.env.MAIL_MODE||''))missing.push('MAIL_MODE');
+if(process.env.MAIL_MODE==='resend')for(const k of ['RESEND_API_KEY','MAIL_FROM'])if(!process.env[k])missing.push(k);
 for(const k of ['BUSINESS_ROLES_CONFIRMED','OPERATIONS_CONFIRMED','DOCUMENTS_APPROVED'])if(process.env[k]!=='true')missing.push(k+'=true');
 if(process.env.SUPABASE_REGION!=='eu-central-1')missing.push('SUPABASE_REGION=eu-central-1');
 if(process.env.APP_MODE!=='production')missing.push('APP_MODE=production');

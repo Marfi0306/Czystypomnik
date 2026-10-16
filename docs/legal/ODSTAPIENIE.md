@@ -1,16 +1,14 @@
-> PROJEKT — SO SOCIAL potwierdzone jako strona umów i adresat korespondencji. Zgłoszenia pozostają wyłączone do czasu wyjaśnienia administratora danych oraz konfiguracji usług.
-
-# Prawo odstąpienia od umowy
+Prawo odstąpienia od umowy
 
 Wersja: 2026-10-16.
 
-## Termin i sposób
+Termin i sposób
 
 Konsument ma prawo odstąpić od zawartej na odległość umowy usługi Czysty Pomnik w ciągu 14 dni od jej zawarcia, bez podawania przyczyny. W naszym procesie umowa jest zawierana po otrzymaniu przez Spółkę e-mailowej akceptacji indywidualnej oferty; samo wysłanie formularza nie rozpoczyna tego terminu ani nie zobowiązuje do zapłaty.
 
 Aby odstąpić, poinformuj SO SOCIAL spółka z ograniczoną odpowiedzialnością, ul. Tadeusza Kościuszki 38AH/2, 05-270 Marki, e-mail czystypomnikwarszawa@gmail.com, telefon +48 693 429 991, o swojej decyzji w jednoznacznym oświadczeniu, np. listem albo e-mailem. Wzór poniżej jest dobrowolny. Do zachowania terminu wystarczy wysłanie oświadczenia przed jego upływem. Potwierdzimy otrzymanie oświadczenia przesłanego e-mailem.
 
-## Skutki i zwrot
+Skutki i zwrot
 
 Po skutecznym odstąpieniu umowę uważa się za niezawartą. Zwrócimy otrzymane płatności bez zbędnej zwłoki, nie później niż w ciągu 14 dni od otrzymania informacji o odstąpieniu. Zwrot nastąpi tym samym sposobem płatności, chyba że wyraźnie uzgodnisz inny sposób niewiążący się dla Ciebie z kosztami. Zaliczka nie przepada automatycznie.
 
@@ -20,7 +18,7 @@ Prawo odstąpienia nie przysługuje po pełnym wykonaniu odpłatnej usługi, je�
 
 Brak poinformowania o odstąpieniu może ustawowo wydłużyć termin. Niniejsza informacja nie ogranicza prawa do reklamacji ani dodatkowej bezpłatnej rezygnacji przed rozpoczęciem fizycznych prac określonej w regulaminie.
 
-## Wyraźne żądanie wcześniejszego rozpoczęcia
+Wyraźne żądanie wcześniejszego rozpoczęcia
 
 Poniższe oświadczenie jest odrębne od akceptacji regulaminu i nie jest zaznaczone domyślnie. Należy je utrwalić dla konkretnej zawieranej umowy:
 
@@ -28,7 +26,7 @@ Poniższe oświadczenie jest odrębne od akceptacji regulaminu i nie jest zaznac
 
 Bez tego żądania wykonanie może rozpocząć się po upływie ustawowego terminu. Jeśli wybrana data jest wcześniejsza, należy uzgodnić inny termin zamiast wymuszać oświadczenie.
 
-## Wzór formularza odstąpienia
+Wzór formularza odstąpienia
 
 Wypełnij i wyślij tylko wtedy, gdy chcesz odstąpić od umowy.
 
@@ -51,3 +49,4 @@ Data: ..........................................................................
 Podpis konsumenta/konsumentów: ........................................................
 
 Podpis jest wymagany tylko wtedy, gdy formularz jest przesyłany w postaci papierowej. Usunięcie niepasujących określeń nie jest warunkiem skuteczności oświadczenia.
+

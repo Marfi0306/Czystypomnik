@@ -19,6 +19,7 @@ before(async()=>{
  await db.exec(await readFile(new URL('../supabase/migrations/001_orders.sql',import.meta.url),'utf8'));
  await db.exec(await readFile(new URL('../supabase/migrations/003_attachment_limit.sql',import.meta.url),'utf8'));
  await db.exec(await readFile(new URL('../supabase/migrations/004_offers_and_retention.sql',import.meta.url),'utf8'));
+ await db.exec(await readFile(new URL('../supabase/migrations/005_manual_mail.sql',import.meta.url),'utf8'));
  await db.query('insert into cemeteries(id,name,address) values($1,$2,$3),($4,$5,$6)',[c1,'Test A','Adres A',c2,'Test B','Adres B']);
  await db.exec(`update settings set ready=true,documents_version='test',business='{"email":"owner@example.invalid"}',documents='{"regulamin":"Test"}';`);
 });
@@ -72,4 +73,17 @@ test('wygaśnięta oferta nie może być zaakceptowana po terminie',async()=>{
  await day('2099-11-09',null);const o=await reserve(input(c1,'2099-11-09'));await call('admin_change',[o.id,'offer',JSON.stringify({scope:'Pełny uzgodniony zakres usługi testowej',bankAccount:'11111111111111111111111111',validUntil:'2099-10-20T10:00:00Z',depositDue:'2099-10-21T10:00:00Z',price:19900,deposit:5000}),'test']);
  const q=await db.query<{offer_id:string}>('select offer_id from orders where id=$1',[o.id]);await db.query("update offers set created_at=now()-interval '2 hours',valid_until=now()-interval '1 hour' where id=$1",[q.rows[0].offer_id]);await db.query("update outbox set state='sent',provider_id='test-provider' where order_id=$1 and kind='offer'",[o.id]);
  await assert.rejects(()=>call('admin_change',[o.id,'contract',JSON.stringify({offerId:q.rows[0].offer_id,acceptedAt:new Date().toISOString(),acceptanceEmail:'Akceptuję ofertę z obowiązkiem zapłaty.',emailMessageId:'<expired@example.invalid>',verifiedSender:true,earlyStartEvidence:''}),'test']),/OFFER_EXPIRED/);
+});
+
+
+test('ręczna wysyłka wymaga dowodu, zapisuje Message-ID i odrzuca powtórzenie',async()=>{
+ await day('2099-12-10',null);const o=await reserve(input(c1,'2099-12-10'));
+ const q=await db.query<{id:string}>("select id from outbox where order_id=$1 and kind='received'",[o.id]);const id=q.rows[0].id;
+ await assert.rejects(()=>call('record_manual_mail',[id,'',new Date().toISOString(),'test']),/MAIL_EVIDENCE_REQUIRED/);
+ await assert.rejects(()=>call('record_manual_mail',[id,'message',new Date(Date.now()+3600000).toISOString(),'test']),/MAIL_EVIDENCE_REQUIRED/);
+ await call('record_manual_mail',[id,'<received@example.invalid>',new Date().toISOString(),'test']);
+ const sent=await db.query<{state:string;provider_id:string}>('select state,provider_id from outbox where id=$1',[id]);assert.equal(sent.rows[0].state,'sent');assert.equal(sent.rows[0].provider_id,'manual:<received@example.invalid>');
+ await assert.rejects(()=>call('record_manual_mail',[id,'<received@example.invalid>',new Date().toISOString(),'test']),/INVALID_TRANSITION/);
+ const owner=await db.query<{id:string}>("select id from outbox where order_id=$1 and kind='owner'",[o.id]);await call('record_manual_mail',[owner.rows[0].id,'dashboard',new Date().toISOString(),'test']);
+ const state=await db.query<{state:string}>("select state from outbox where id=$1",[owner.rows[0].id]);assert.equal(state.rows[0].state,'cancelled');
 });

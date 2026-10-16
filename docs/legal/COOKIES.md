@@ -1,17 +1,18 @@
 Informacja o cookies i pamięci przeglądarki
 
-Wersja: 2026-10-16.
+Wersja: 2026-10-16-v1.
 
-Własna aplikacja podglądu
+1. Strona i formularz
 
-Aplikacja nie używa reklamowych cookies, Meta Pixel, zewnętrznej analityki ani nagrywania sesji. Nie zapisuje danych formularza w localStorage. Dane i podglądy zdjęć są utrzymywane w pamięci bieżącej karty. Formularz demonstracyjny niczego nie wysyła. Nie osadzamy map, filmów ani widżetów społecznościowych.
+Strona Czysty Pomnik nie używa reklamowych cookies, Meta Pixel, zewnętrznej analityki ani nagrywania sesji. Nie osadzamy map, filmów ani widżetów społecznościowych. Nie zapisujemy danych formularza w localStorage. Wpisywane informacje i podglądy zdjęć pozostają w pamięci karty do chwili wysłania. Po wysłaniu zgłoszenie jest zapisane w systemie obsługi zgodnie z Polityką prywatności. Odświeżenie strony usuwa niezapisany stan formularza.
 
-Panel obsługi
+2. Panel obsługi
 
-Po podłączeniu API panel obsługi może używać niezbędnego ciasteczka cp_session, ograniczonego do /api/admin i do jednej godziny. W produkcji stosuje Secure, HttpOnly i SameSite=Strict. Wylogowanie usuwa ciasteczko. Blokowanie go uniemożliwia logowanie do panelu, ale nie przeglądanie strony. Statyczny podgląd nie zapewnia logowania.
+Po zalogowaniu uprawnionego użytkownika serwer zapisuje niezbędne ciasteczko cp_session, ograniczone do /api/admin, maksymalnie na jedną godzinę. Używa zabezpieczeń Secure, HttpOnly i SameSite=Strict. Służy wyłącznie uwierzytelnianiu i ochronie dostępu do panelu. Wylogowanie usuwa ciasteczko. Nie jest potrzebne do oglądania strony ani wysyłania zgłoszenia przez klienta.
 
-Ustawienia przeglądarki
+3. Hosting i ustawienia
 
-Cookies możesz usuwać lub blokować w swojej przeglądarce. Podgląd nie wymaga zgody na opcjonalne mechanizmy śledzenia, ponieważ ich nie stosuje. Dostawca hostingu może używać własnych mechanizmów dostępu, opisanych osobno poniżej.
+Hosting i API zapewnia Vercel. Dostawca może stosować mechanizmy techniczne służące bezpieczeństwu i dostępności swojej infrastruktury, zgodnie z https://vercel.com/legal/privacy-policy. Nie włączyliśmy Vercel Web Analytics ani Speed Insights. Stosowane przez aplikację mechanizmy są niezbędne do żądanej usługi; nie stosujemy opcjonalnego śledzenia wymagającego zgody.
 
-Kontakt Czysty Pomnik: czystypomnikwarszawa@gmail.com, tel. 693 429 991.
+Cookies możesz usuwać i blokować w ustawieniach przeglądarki. Zablokowanie ciasteczka sesji uniemożliwi korzystanie z panelu obsługi. Administrator: SO SOCIAL sp. z o.o., ul. Tadeusza Kościuszki 38AH/2, 05-270 Marki; kontakt: czystypomnikwarszawa@gmail.com, +48 693 429 991. Pozostałe informacje o danych i prawach zawiera Polityka prywatności.
+

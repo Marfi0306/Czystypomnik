@@ -4,9 +4,7 @@ const content=JSON.parse(await readFile(new URL('../shared/site-content.json',im
 const output=process.argv[2];
 if(!output)throw new Error('Podaj katalog wynikowy, np. node scripts/prepare-settings.mjs /private/tmp/cp-settings');
 const complete=content.contractPartyConfirmed===true&&content.dataControllerConfirmed===true&&content.documentsApproved===true;
-const data={ready:false,documents_version:content.documents_version+(complete?'-resend-v1':'-incomplete'),business:content.business,documents:complete?{...content.documents}:{}};
-const resend='Automatyczne wiadomości związane ze zgłoszeniami wysyłamy za pośrednictwem Resend (warunki: https://resend.com/legal/dpa). Przekazujemy adres e-mail oraz dane zawarte w wiadomości. Usługa i jej podwykonawcy mogą przetwarzać dane poza EOG, w tym w Stanach Zjednoczonych, z zastosowaniem mechanizmów właściwych dla danego transferu wskazanych w DPA.';
-if(complete)data.documents.prywatnosc=data.documents.prywatnosc.replace('6. Okresy przechowywania',resend+'\n\n6. Okresy przechowywania');
+const data={ready:false,documents_version:content.documents_version,business:content.business,documents:complete?{...content.documents}:{}};
 const quote=v=>"'"+String(v).replaceAll("'","''")+"'";
 await mkdir(resolve(output),{recursive:true});
 await writeFile(resolve(output,'settings.json'),JSON.stringify(data,null,2)+'\n');
