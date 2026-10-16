@@ -18,6 +18,11 @@ app.set('trust proxy', Number(process.env.TRUST_PROXY_HOPS || 0));
 app.use(express.json({ limit: '32kb' })); app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use((_req,res,next) => { res.set({ 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'strict-origin-when-cross-origin', 'Permissions-Policy': 'camera=(), microphone=(), geolocation=()', 'X-Frame-Options': 'DENY', 'Content-Security-Policy': "default-src 'self'; img-src 'self' blob: data: https://*.supabase.co; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'" }); next(); });
 const wrap = (fn: (req: Request,res: Response,next: NextFunction) => Promise<unknown>) => (req: Request,res: Response,next: NextFunction) => { Promise.resolve(fn(req,res,next)).catch(next); };
+app.get('/api/health',wrap(async(_req,res)=>{
+ if(!db){res.status(503).json({status:'unavailable',database:'not-configured'});return;}
+ const {error}=await db.from('settings').select('id').eq('id',true).single();
+ res.status(error?503:200).json({status:error?'unavailable':'ok',database:error?'unavailable':'connected'});
+}));
 const hash = (v: string) => createHash('sha256').update(v).digest('hex');
 const uploadToken = (key: string) => createHmac('sha256',process.env.UPLOAD_SECRET || '').update(key).digest('hex');
 const same = (a: string,b: string) => { const x=Buffer.from(a); const y=Buffer.from(b); return x.length===y.length && timingSafeEqual(x,y); };

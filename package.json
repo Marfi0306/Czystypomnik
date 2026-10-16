@@ -6,10 +6,11 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "dev:api": "tsx watch server/start.ts",
-    "build": "tsc --noEmit && vite build && node scripts/build-meta.mjs",
+    "build": "tsc --noEmit && vite build && vite build --config vite.server.config.ts && node scripts/build-meta.mjs",
     "start": "node --import tsx server/start.ts",
     "test": "node --import tsx --test tests/*.test.ts",
-    "check:release": "node scripts/check-release.mjs"
+    "check:release": "node scripts/check-release.mjs",
+    "verify:runtime": "node --test tests/runtime.test.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.0.0",
