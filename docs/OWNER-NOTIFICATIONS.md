@@ -22,7 +22,11 @@ W panelu przy nieudanym alercie można wybrać „Ponów wysyłkę”.
 
 `sent` oznacza przyjęcie przez Resend. Dostarczenie sprawdzaj w Resend Emails
 albo przez chroniony `GET /api/internal/owner-notifications/<outbox-id>`;
-zwraca jedynie stan kolejki i zdarzenie dostawcy. `delivered` oznacza
+zwraca jedynie stan kolejki i zdarzenie dostawcy. Klucz Resend ograniczony do
+wysyłki może nie pozwalać na odczyt zdarzeń: odpowiedź zawiera wtedy
+`event: null` i przyczynę w `verification`. Sprawdź dostarczenie w panelu
+Resend lub skrzynce Gmail; do samej wysyłki nie potrzeba szerszych uprawnień.
+`delivered` oznacza
 przyjęcie przez serwer odbiorcy, nie odczytanie ani umieszczenie w Odebranych.
 
 Przy odtwarzaniu środowiska zastosuj migracje, zapisz zgodne sekrety,

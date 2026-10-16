@@ -54,7 +54,7 @@ export async function ownerDelivery(id:string) {
  if(error || data?.kind!=='owner' || data.recipient!==ownerRecipient)throw new Error('NOT_FOUND');
  if(data.state!=='sent' || !data.provider_id)return {state:data.state,event:null};
  const r=await fetch('https://api.resend.com/emails/'+encodeURIComponent(data.provider_id),{headers:{Authorization:`Bearer ${process.env.RESEND_API_KEY}`},signal:AbortSignal.timeout(10000)});
- if(!r.ok)throw new Error('MAIL_DELIVERY_HTTP_'+r.status);
+ if(!r.ok)return {state:data.state,event:null,verification:'provider_http_'+r.status};
  const result=await r.json() as {last_event?:string};
  return {state:data.state,event:result.last_event||null};
 }
