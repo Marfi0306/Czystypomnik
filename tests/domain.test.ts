@@ -1,5 +1,5 @@
 import {test} from 'node:test';import assert from 'node:assert/strict';
-import {localDate,placesLabel,orderSchema,packages} from '../shared/domain';
+import {localDate,placesLabel,orderSchema,packages,normalizePhone} from '../shared/domain';
 import {offerSchema} from '../shared/offers';
 import {messageFor} from '../server/mail';
 test('oferta: ceny i zaliczki z zatwierdzonego źródła',()=>{assert.deepEqual(packages.map(p=>[p.price,p.deposit]),[[19900,5000],[29900,7500],[44900,15000]]);});
@@ -22,4 +22,13 @@ test('zgłoszenie bliskiego dnia nie zbiera żądania wcześniejszego rozpoczęc
 test('oferta wymaga poprawnego rachunku i logicznych terminów',()=>{
  const p={scope:'Uzgodniony zakres testowej usługi',bankAccount:'61109010140000071219812874',price:19900,deposit:5000,validUntil:'2099-10-20T10:00:00Z',depositDue:'2099-10-21T10:00:00Z'};
  assert.equal(offerSchema.safeParse(p).success,true);assert.equal(offerSchema.safeParse({...p,bankAccount:'11111111111111111111111111'}).success,false);assert.equal(offerSchema.safeParse({...p,deposit:20000}).success,false);assert.equal(offerSchema.safeParse({...p,depositDue:'2099-10-19T10:00:00Z'}).success,false);
+});
+
+
+test('telefon: polski numer bez prefiksu, wklejanie i zagraniczny kod kraju',()=>{
+ const p={idempotencyKey:crypto.randomUUID(),packageId:'silver',quotedPrice:19900,quotedDeposit:5000,cemeteryId:crypto.randomUUID(),date:'2099-10-26',variant:'single-granite',location:'Od głównej bramy trzecia alejka w prawo',inscription:'Osoba Testowa',name:'Test',phone:'600000000',email:'test@example.invalid',terms:true,earlyStart:false,documentsVersion:'v1'};
+ for(const phone of ['600000000','600 000 000','600-000-000','+48 600 000 000','48 600 000 000','0048 600 000 000'])assert.equal(orderSchema.parse({...p,phone}).phone,'+48600000000');
+ for(const [phone,expected] of [['+44 7700 900123','+447700900123'],['0049 151 23456789','+4915123456789']])assert.equal(orderSchema.parse({...p,phone}).phone,expected);
+ for(const phone of ['','+48','60000000','+48 60000000','6000000000','numer telefonu','++48600000000'])assert.equal(orderSchema.safeParse({...p,phone}).success,false);
+ assert.equal(normalizePhone('600 000 000'),'+48600000000');assert.equal(normalizePhone(normalizePhone('600000000')),'+48600000000');
 });
