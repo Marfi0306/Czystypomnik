@@ -1,3 +1,2 @@
-import {money,type Package} from './domain';
-export const earlyStartStatement='Żądam rozpoczęcia usługi przed upływem 14 dni na odstąpienie. Po pełnym wykonaniu usługi za moją uprzednią zgodą i po przyjęciu do wiadomości tej informacji tracę prawo odstąpienia. Przy odstąpieniu po rozpoczęciu zapłacę proporcjonalnie za wykonaną część.';
-export const termsStatement=(pkg:Pick<Package,'price'|'deposit'>)=>`Akceptuję regulamin i warunki zamówienia, w tym cenę ${money(pkg.price)} oraz zaliczkę ${money(pkg.deposit)} płatną po potwierdzeniu.`;
+export const earlyStartStatement='Wyraźnie żądam rozpoczęcia świadczenia usługi przed upływem 14 dni od zawarcia umowy i wyrażam na to zgodę. Przyjmuję do wiadomości, że po pełnym wykonaniu odpłatnej usługi utracę prawo odstąpienia. W razie odstąpienia po rozpoczęciu, ale przed pełnym wykonaniem, zapłacę proporcjonalnie za faktycznie spełnione świadczenie, na zasadach opisanych w informacji o odstąpieniu.';
+export const termsStatement='Akceptuję regulamin korzystania z formularza i obsługi zgłoszeń. Rozumiem, że wysyłam zgłoszenie do kontaktu, a nie odpłatne zamówienie.';

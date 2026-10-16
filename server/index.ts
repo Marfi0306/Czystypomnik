@@ -9,7 +9,9 @@ import { createClient } from '@supabase/supabase-js';
 import { db, readySettings, rpc } from './db';
 import { processOutbox } from './mail';
 import { orderSchema } from '../shared/domain';
-import { earlyStartStatement,termsStatement } from '../shared/consent';
+import { termsStatement } from '../shared/consent';
+import {offerSchema,contractSchema} from '../shared/offers';
+import {runRetention} from './retention';
 const app = express();
 app.disable('x-powered-by');
 app.set('trust proxy', Number(process.env.TRUST_PROXY_HOPS || 0));
@@ -22,7 +24,7 @@ const same = (a: string,b: string) => { const x=Buffer.from(a); const y=Buffer.f
 async function withDeclarations(input: {packageId:string;earlyStart:boolean}) {
  const {data,error}=await db!.from('packages').select('price,deposit,version').eq('id',input.packageId).single();
  if(error)throw new Error('PACKAGE_UNAVAILABLE');
- return {...input,expectedPackageVersion:data.version,declarations:{terms:termsStatement(data),earlyStart:input.earlyStart?earlyStartStatement:null}};
+ return {...input,expectedPackageVersion:data.version,declarations:{terms:termsStatement,earlyStart:null}};
 }
 function origin(req: Request,res: Response,next: NextFunction) { if (req.get('origin') !== process.env.APP_ORIGIN) { res.status(403).json({ error: 'ORIGIN_DENIED' }); return; } next(); }
 async function actor(req: Request) {
@@ -44,7 +46,7 @@ app.get('/api/config',wrap(async (_req,res)=>{
   if (!s) { res.json({ mode:'demo' }); return; }
   const [p,c]=await Promise.all([db!.from('packages').select('id,name,price,deposit,weight,description,features').eq('active',true).order('price'),db!.from('cemeteries').select('id,name,address').eq('active',true).order('name')]);
   if(p.error||c.error) throw new Error('DATABASE_UNAVAILABLE');
-  res.json({mode:'production',packages:p.data,cemeteries:c.data,business:s.business,documents:s.documents,documentsVersion:s.documents_version});
+  res.json({mode:'production',packages:p.data,cemeteries:c.data,business:s.business,documents:s.documents,documentsVersion:s.documents_version,documentsApproved:true});
 }));
 app.get('/api/availability',wrap(async(req,res)=>{
   if(!await readySettings()) throw new Error('NOT_READY');
@@ -57,7 +59,7 @@ app.post('/api/orders',origin,wrap(async(req,res)=>{
   const order=await rpc('reserve_order',{p_input:await withDeclarations(input),p_hash:hash(JSON.stringify(input)),p_upload_hash:hash(secret)});
   res.status(201).json({...order,uploadToken:secret,emailQueued:true});
 }));
-const upload=multer({ storage:multer.memoryStorage(),limits:{fileSize:5*1024*1024,files:3,fields:0} });
+const upload=multer({ storage:multer.memoryStorage(),limits:{fileSize:3*1024*1024,files:1,fields:0} });
 app.post('/api/orders/:id/photos',origin,wrap(async(req,res,next)=>{
   if(!await readySettings()) throw new Error('NOT_READY');
   await rate(req,'photo');
@@ -65,7 +67,7 @@ app.post('/api/orders/:id/photos',origin,wrap(async(req,res,next)=>{
   const {data:o,error}=await db!.from('orders').select('id,upload_secret_hash,upload_expires_at').eq('id',id).single();
   if(error || !o || !same(hash(secret),o.upload_secret_hash) || Date.parse(o.upload_expires_at)<Date.now()) throw new Error('UNAUTHORIZED');
   res.locals.orderId=id; next();
-}),upload.array('photos',3),wrap(async(req,res)=>{
+}),upload.array('photos',1),wrap(async(req,res)=>{
   const id=res.locals.orderId as string; const files=req.files as Express.Multer.File[];
   if(!files?.length) throw new Error('INVALID_FILE');
   // Advisory lock in attachment RPC also guards concurrent attempts.
@@ -86,7 +88,7 @@ app.post('/api/orders/:id/photos',origin,wrap(async(req,res,next)=>{
   } catch(e) { throw e; }
 }));
 app.post('/api/admin/login',origin,wrap(async(req,res)=>{
-  if(!db || !process.env.ADMIN_EMAILS || !process.env.COOKIE_SECRET) throw new Error('NOT_READY');
+  if(!db || !process.env.ADMIN_EMAILS || (process.env.COOKIE_SECRET||'').length<32) throw new Error('NOT_READY');
   await rate(req,'login');
   const {email,password}=z.object({email:z.email(),password:z.string().min(1).max(200)}).parse(req.body);
   // Osobny klient: sesja administratora nie może podmienić serwerowego service_role.
@@ -106,18 +108,22 @@ app.get('/api/admin/orders',wrap(async(req,res)=>{
 }));
 app.get('/api/admin/orders/:id',wrap(async(req,res)=>{
   await actor(req); const id=z.uuid().parse(req.params.id);
-  const [o,a,h]=await Promise.all([db!.from('orders').select('*').eq('id',id).single(),db!.from('attachments').select('*').eq('order_id',id),db!.from('history').select('*').eq('order_id',id).order('created_at')]);
-  if(o.error||a.error||h.error) throw new Error('NOT_FOUND');
+  const [o,a,h,offers]=await Promise.all([db!.from('orders').select('*').eq('id',id).single(),db!.from('attachments').select('*').eq('order_id',id),db!.from('history').select('*').eq('order_id',id).order('created_at'),db!.from('offers').select('*').eq('order_id',id).order('created_at',{ascending:false})]);
+  if(o.error||a.error||h.error||offers.error) throw new Error('NOT_FOUND');
   const photos=await Promise.all(a.data.map(async f=>{const {data,error}=await db!.storage.from('grave-photos').createSignedUrl(f.path,300); if(error) throw new Error('PHOTO_UNAVAILABLE'); return {id:f.id,url:data.signedUrl};}));
-  res.json({order:o.data,photos,history:h.data});
+  res.json({order:o.data,photos,history:h.data,offers:offers.data});
 }));
 const changeSchema=z.discriminatedUnion('action',[
- z.object({action:z.literal('status'),data:z.object({status:z.enum(['accepted','scheduled','in_progress','completed','rejected','cancelled','expired']),message:z.string().max(2000).default('')})}),
- z.object({action:z.literal('move'),data:z.object({date:z.iso.date(),cemeteryId:z.uuid(),message:z.string().min(3).max(2000)})}),
+ z.object({action:z.literal('offer'),data:offerSchema}),
+ z.object({action:z.literal('contract'),data:contractSchema}),
+ z.object({action:z.literal('hold'),data:z.object({reason:z.string().trim().min(10).max(1000)})}),
+ z.object({action:z.literal('release_hold'),data:z.object({message:z.string().trim().min(10).max(1000)})}),
+ z.object({action:z.literal('status'),data:z.object({status:z.enum(['scheduled','in_progress','completed','rejected','cancelled','expired']),message:z.string().max(2000).default(''),deliveryEmailId:z.string().max(500).default(''),deliveryEvidence:z.string().max(8000).default(''),receivedAt:z.union([z.iso.datetime({offset:true}),z.literal('')]).default(''),paidAmount:z.number().int().nonnegative().default(0),paymentVerified:z.boolean().default(false)})}),
+ z.object({action:z.literal('move'),data:z.object({date:z.iso.date(),cemeteryId:z.uuid(),message:z.string().min(3).max(2000),agreementEmail:z.string().trim().min(30).max(8000)})}),
  z.object({action:z.enum(['deposit','refund']),data:z.object({message:z.string().max(2000).default('')})}),
  z.object({action:z.literal('note'),data:z.object({note:z.string().max(4000),attention:z.string().max(200),followupAt:z.union([z.iso.datetime({offset:true}),z.literal('')])})}),
 ]);
-app.post('/api/admin/orders/:id',origin,wrap(async(req,res)=>{const user=await actor(req); const body=changeSchema.parse(req.body);await rpc('admin_change',{p_id:z.uuid().parse(req.params.id),p_action:body.action,p_data:body.data,p_actor:user});res.json({ok:true});}));
+app.post('/api/admin/orders/:id',origin,wrap(async(req,res)=>{const user=await actor(req); if(!await readySettings())throw new Error('NOT_READY'); const body=changeSchema.parse(req.body);await rpc('admin_change',{p_id:z.uuid().parse(req.params.id),p_action:body.action,p_data:body.data,p_actor:user});res.json({ok:true});}));
 app.post('/api/admin/orders',origin,wrap(async(req,res)=>{
  const user=await actor(req);if(!await readySettings()) throw new Error('NOT_READY');const body=z.object({order:orderSchema,source:z.enum(['phone','meta'])}).parse(req.body);const secret=uploadToken(body.order.idempotencyKey);
  res.json(await rpc('reserve_order',{p_input:await withDeclarations(body.order),p_hash:hash(JSON.stringify(body.order)),p_upload_hash:hash(secret),p_source:body.source,p_actor:user}));
@@ -131,12 +137,13 @@ app.post('/api/admin/cemeteries',origin,wrap(async(req,res)=>{await actor(req);c
 app.post('/api/admin/packages',origin,wrap(async(req,res)=>{const user=await actor(req);const b=z.object({id:z.string().max(80),price:z.number().int().positive(),deposit:z.number().int().positive(),weight:z.number().int().positive(),active:z.boolean()}).refine(v=>v.deposit<=v.price).parse(req.body);await rpc('configure_package',{p_id:b.id,p_price:b.price,p_deposit:b.deposit,p_weight:b.weight,p_active:b.active,p_actor:user});res.json({ok:true});}));
 app.post('/api/admin/outbox/:id/retry',origin,wrap(async(req,res)=>{const user=await actor(req);const id=z.uuid().parse(req.params.id);const {error}=await db!.from('outbox').update({state:'pending',attempts:0,next_attempt_at:new Date().toISOString()}).eq('id',id).eq('state','failed');if(error) throw new Error('DATABASE_UNAVAILABLE');await db!.from('history').insert({actor:user,event:'mail_retry',details:{id}});res.json({ok:true});}));
 app.post('/api/internal/outbox',wrap(async(req,res)=>{if(!process.env.CRON_SECRET||!same(req.get('authorization')||'',`Bearer ${process.env.CRON_SECRET}`)) throw new Error('UNAUTHORIZED');if(!await readySettings()) throw new Error('NOT_READY');res.json(await processOutbox());}));
+app.post('/api/internal/retention',wrap(async(req,res)=>{if(!process.env.CRON_SECRET||!same(req.get('authorization')||'',`Bearer ${process.env.CRON_SECRET}`))throw new Error('UNAUTHORIZED');res.json(await runRetention());}));
 app.use('/api',(_req,res)=>{res.status(404).json({error:'NOT_FOUND'});});
 app.use(express.static(resolve('dist')));
 app.get('/{*path}',(_req,res)=>{res.sendFile(resolve('dist/index.html'));});
 app.use((error: Error, _req:Request,res:Response,_next:NextFunction)=>{
- const known=['NOT_READY','FULL','IDEMPOTENCY_CONFLICT','DOCUMENTS_CHANGED','PACKAGE_CHANGED','UNAUTHORIZED','RATE_LIMIT','PAST_DATE','INVALID_FILE','EARLY_START_REQUIRED','CAPACITY_BELOW_OCCUPANCY','TERMINAL_STATUS','INVALID_TRANSITION','NOT_ACCEPTED','NO_DEPOSIT','ALREADY_REFUNDED','REASON_REQUIRED'];
+ const known=['NOT_READY','FULL','IDEMPOTENCY_CONFLICT','DOCUMENTS_CHANGED','PACKAGE_CHANGED','UNAUTHORIZED','RATE_LIMIT','PAST_DATE','INVALID_FILE','EARLY_START_REQUIRED','CAPACITY_BELOW_OCCUPANCY','TERMINAL_STATUS','INVALID_TRANSITION','NOT_ACCEPTED','OFFER_REQUIRED','OFFER_NOT_SENT','OFFER_EXPIRED','OFFER_INVALID','OFFER_SENDING','DELIVERY_REQUIRED','RETENTION_IN_PROGRESS','CONTRACT_EVIDENCE_REQUIRED','CONTRACT_REQUIRED','NO_DEPOSIT','ALREADY_REFUNDED','REASON_REQUIRED'];
  const code=known.find(v=>error.message.includes(v));
  res.status(error instanceof z.ZodError ? 400 : code==='UNAUTHORIZED'?401:code==='RATE_LIMIT'?429:code==='NOT_READY'?503:code?409:500).json({error:code || (error instanceof z.ZodError?'VALIDATION_ERROR':error instanceof multer.MulterError?'INVALID_FILE':'SERVICE_UNAVAILABLE'),...(error instanceof z.ZodError?{fields:error.flatten().fieldErrors}:{})});
 });
-app.listen(Number(process.env.PORT || 3001),process.env.HOST || '127.0.0.1',()=>console.log(`Czysty Pomnik API: http://127.0.0.1:${process.env.PORT || 3001}`));
+export default app;

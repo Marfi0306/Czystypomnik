@@ -1,25 +1,51 @@
-# Projekt informacji o prawie odstąpienia
+# Prawo odstąpienia od umowy
 
-Status: roboczy. Uzupełnić usługodawcę, adresy i zasady rozliczeń oraz sprawdzić treść dla przyjętej formy działalności i umowy. Przekazywać pełny tekst wraz z potwierdzeniem przyjęcia na trwałym nośniku.
+Wersja: 2026-10-16.
 
-Konsument zawierający umowę usługi na odległość ma co do zasady 14 dni na odstąpienie bez podania przyczyny, liczone od zawarcia umowy. Wystarczy wysłać oświadczenie przed upływem terminu na [e-mail lub adres wykonawcy]. Można użyć wzoru poniżej; wzór nie jest obowiązkowy.
+## Termin i sposób
 
-Jeżeli klient wyraźnie żąda rozpoczęcia usługi przed upływem tego terminu, po odstąpieniu już po rozpoczęciu wykonania mogą mieć zastosowanie przepisy o proporcjonalnej zapłacie za świadczenie wykonane do chwili poinformowania o odstąpieniu. Sposób rozliczenia musi odpowiadać faktycznie wykonanej części i obowiązującym przepisom.
+Konsument ma prawo odstąpić od zawartej na odległość umowy usługi Czysty Pomnik w ciągu 14 dni od jej zawarcia, bez podawania przyczyny. W naszym procesie umowa jest zawierana po otrzymaniu przez Spółkę e-mailowej akceptacji indywidualnej oferty; samo wysłanie formularza nie rozpoczyna tego terminu ani nie zobowiązuje do zapłaty.
 
-Prawo odstąpienia może nie przysługiwać po pełnym wykonaniu odpłatnej usługi, jeśli wykonanie rozpoczęło się za wyraźną i uprzednią zgodą konsumenta, który został przed rozpoczęciem poinformowany o utracie prawa po pełnym wykonaniu i przyjął to do wiadomości, przy spełnieniu właściwych wymagań ustawowych. Samo zaznaczenie żądania wcześniejszego rozpoczęcia nie odbiera natychmiast prawa odstąpienia.
+Aby odstąpić, poinformuj SO SOCIAL spółka z ograniczoną odpowiedzialnością, ul. Tadeusza Kościuszki 38AH/2, 05-270 Marki, e-mail czystypomnikwarszawa@gmail.com, telefon +48 693 429 991, o swojej decyzji w jednoznacznym oświadczeniu, np. listem albo e-mailem. Wzór poniżej jest dobrowolny. Do zachowania terminu wystarczy wysłanie oświadczenia przed jego upływem. Potwierdzimy otrzymanie oświadczenia przesłanego e-mailem.
 
-Zwrot wpłat oraz terminy i metoda rozliczenia: [dopasować do aktualnych przepisów i ustalonego procesu; nie wprowadzać automatycznej bezzwrotności zaliczki].
+## Skutki i zwrot
 
-## Wzór oświadczenia
+Po skutecznym odstąpieniu umowę uważa się za niezawartą. Zwrócimy otrzymane płatności bez zbędnej zwłoki, nie później niż w ciągu 14 dni od otrzymania informacji o odstąpieniu. Zwrot nastąpi tym samym sposobem płatności, chyba że wyraźnie uzgodnisz inny sposób niewiążący się dla Ciebie z kosztami. Zaliczka nie przepada automatycznie.
 
-Adresat: [pełna tożsamość, adres, e-mail wykonawcy].
+Jeżeli wyraźnie zażądasz rozpoczęcia świadczenia przed upływem 14 dni, a następnie odstąpisz przed pełnym wykonaniem, możesz być zobowiązany do zapłaty proporcjonalnej do świadczenia faktycznie spełnionego do chwili poinformowania o odstąpieniu, według uzgodnionej ceny, a gdy jest nadmierna — wartości rynkowej. Obowiązek ten podlega ustawowym warunkom, w szczególności wcześniejszemu przekazaniu wymaganych informacji i uzyskaniu Twojego wyraźnego żądania. Rozliczenie wyjaśnimy, zwracając pozostałą część wpłaty. Samo zarezerwowanie terminu nie stanowi wykonania usługi.
 
-Ja/My informuję/informujemy o odstąpieniu od umowy świadczenia następującej usługi: [pakiet, cmentarz, numer zamówienia].
+Prawo odstąpienia nie przysługuje po pełnym wykonaniu odpłatnej usługi, jeżeli została wykonana za Twoją wyraźną i uprzednią zgodą, a przed rozpoczęciem poinformowano Cię, że po pełnym wykonaniu utracisz to prawo, i przyjąłeś to do wiadomości. Sam wybór daty, zaliczka lub rozpoczęcie prac nie powodują natychmiastowej utraty prawa.
 
-Data zawarcia umowy: [data]. Imię i nazwisko konsumenta/konsumentów: [dane]. Adres konsumenta/konsumentów: [adres]. Data: [data]. Podpis: [tylko przy oświadczeniu papierowym].
+Brak poinformowania o odstąpieniu może ustawowo wydłużyć termin. Niniejsza informacja nie ogranicza prawa do reklamacji ani dodatkowej bezpłatnej rezygnacji przed rozpoczęciem fizycznych prac określonej w regulaminie.
 
-## Oświadczenie przy wcześniejszym rozpoczęciu
+## Wyraźne żądanie wcześniejszego rozpoczęcia
 
-„Żądam rozpoczęcia usługi przed upływem 14 dni na odstąpienie. Po pełnym wykonaniu usługi za moją uprzednią zgodą i po przyjęciu do wiadomości tej informacji tracę prawo odstąpienia. Przy odstąpieniu po rozpoczęciu zapłacę proporcjonalnie za wykonaną część.”
+Poniższe oświadczenie jest odrębne od akceptacji regulaminu i nie jest zaznaczone domyślnie. Należy je utrwalić dla konkretnej zawieranej umowy:
 
-Źródło zweryfikowane 15.10.2026: [UOKiK — odstąpienie od umowy](https://prawakonsumenta.uokik.gov.pl/pytania-i-odpowiedzi/odstapienie-od-umowy/). Ostateczne brzmienie wymaga dopasowania i weryfikacji przed produkcją.
+„Wyraźnie żądam rozpoczęcia świadczenia usługi przed upływem 14 dni od zawarcia umowy i wyrażam na to zgodę. Przyjmuję do wiadomości, że po pełnym wykonaniu odpłatnej usługi utracę prawo odstąpienia. W razie odstąpienia po rozpoczęciu, ale przed pełnym wykonaniem, zapłacę proporcjonalnie za faktycznie spełnione świadczenie, na zasadach opisanych w informacji o odstąpieniu.”
+
+Bez tego żądania wykonanie może rozpocząć się po upływie ustawowego terminu. Jeśli wybrana data jest wcześniejsza, należy uzgodnić inny termin zamiast wymuszać oświadczenie.
+
+## Wzór formularza odstąpienia
+
+Wypełnij i wyślij tylko wtedy, gdy chcesz odstąpić od umowy.
+
+Adresat: SO SOCIAL spółka z ograniczoną odpowiedzialnością, ul. Tadeusza Kościuszki 38AH/2, 05-270 Marki; czystypomnikwarszawa@gmail.com.
+
+Ja/My niniejszym informuję/informujemy o odstąpieniu od umowy świadczenia następującej usługi:
+
+........................................................................................
+
+Numer zamówienia, jeśli znany: ........................................................
+
+Data zawarcia umowy: ..................................................................
+
+Imię i nazwisko konsumenta/konsumentów: ...............................................
+
+Adres konsumenta/konsumentów: .........................................................
+
+Data: ................................................................................
+
+Podpis konsumenta/konsumentów: ........................................................
+
+Podpis jest wymagany tylko wtedy, gdy formularz jest przesyłany w postaci papierowej. Usunięcie niepasujących określeń nie jest warunkiem skuteczności oświadczenia.

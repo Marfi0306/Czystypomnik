@@ -1,0 +1,13 @@
+import {readFile,writeFile,mkdir} from 'node:fs/promises';
+import {resolve} from 'node:path';
+const content=JSON.parse(await readFile(new URL('../shared/site-content.json',import.meta.url),'utf8'));
+const output=process.argv[2];
+if(!output)throw new Error('Podaj katalog wynikowy, np. node scripts/prepare-settings.mjs /private/tmp/cp-settings');
+const data={ready:false,documents_version:content.documents_version+'-resend-v1',business:content.business,documents:{...content.documents}};
+const resend='Automatyczne wiadomości związane ze zgłoszeniami wysyłamy za pośrednictwem Resend (warunki: https://resend.com/legal/dpa). Przekazujemy adres e-mail oraz dane zawarte w wiadomości. Usługa i jej podwykonawcy mogą przetwarzać dane poza EOG, w tym w Stanach Zjednoczonych, z zastosowaniem mechanizmów właściwych dla danego transferu wskazanych w DPA.';
+data.documents.prywatnosc=data.documents.prywatnosc.replace('6. Okresy przechowywania',resend+'\n\n6. Okresy przechowywania');
+const quote=v=>"'"+String(v).replaceAll("'","''")+"'";
+await mkdir(resolve(output),{recursive:true});
+await writeFile(resolve(output,'settings.json'),JSON.stringify(data,null,2)+'\n');
+await writeFile(resolve(output,'settings.sql'),`-- Import nie włącza zgłoszeń. Uruchom dopiero po weryfikacji modelu i dostawców.\nupdate public.settings set ready=false,documents_version=${quote(data.documents_version)},business=${quote(JSON.stringify(data.business))}::jsonb,documents=${quote(JSON.stringify(data.documents))}::jsonb where id=true;\n`);
+console.log('Przygotowano settings.json i settings.sql (ready=false). Wariant produkcyjny Supabase / Vercel / Google / Resend wymaga potwierdzenia faktycznych dostawców.');

@@ -5,10 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
-    "dev:api": "tsx watch server/index.ts",
-    "build": "tsc --noEmit && vite build",
-    "start": "node --import tsx server/index.ts",
-    "test": "node --import tsx --test tests/*.test.ts"
+    "dev:api": "tsx watch server/start.ts",
+    "build": "tsc --noEmit && vite build && node scripts/build-meta.mjs",
+    "start": "node --import tsx server/start.ts",
+    "test": "node --import tsx --test tests/*.test.ts",
+    "check:release": "node scripts/check-release.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.0.0",
@@ -33,5 +34,8 @@
     "tsx": "^4.0.0",
     "typescript": "^5.9.0",
     "vite": "^7.0.0"
+  },
+  "engines": {
+    "node": "24.x"
   }
 }

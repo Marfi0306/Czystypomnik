@@ -47,3 +47,10 @@
   .season-tag{top:20px;bottom:auto}
   .hero-caption{right:20px;bottom:26px}
 }
+
+.legal{max-width:1040px;padding-block:58px 70px}.legal h1{font-size:clamp(32px,4vw,54px);line-height:1.12;overflow-wrap:anywhere}
+.legal-nav{display:flex;flex-wrap:wrap;gap:10px 24px;margin-block:28px}.legal-nav a{font-size:14px;min-height:44px;display:inline-flex;align-items:center}.legal-nav a[aria-current=page]{color:#987338;font-weight:700}
+.legal-actions{display:flex;gap:12px;flex-wrap:wrap;margin-block:24px}.legal-body{max-width:820px}.legal-body p{font-size:16px;line-height:1.8;margin:0 0 19px;white-space:pre-line;overflow-wrap:anywhere}.legal-body h2{font:600 24px/1.35 Arial,sans-serif;letter-spacing:0;margin:36px 0 16px}.legal-body+h2{margin-top:32px}
+.business-footer{padding:24px 0 32px;border-top:1px solid #e4dfd3;color:#637080}.business-footer p{font-size:12px;line-height:1.9;overflow-wrap:anywhere}.business-footer .business-label{color:#8b7247;font-size:10px;letter-spacing:1px;margin-bottom:7px}.contact-email{display:block;font-size:14px;margin:18px 0 22px;overflow-wrap:anywhere}.admin pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px}.admin .panel+.panel{margin-top:20px}
+@media(max-width:560px){.legal{padding-block:35px 45px}.legal-body p{font-size:15px}.legal-body h2{font-size:21px}.legal-actions .button{width:100%}.legal-nav{gap:2px 18px}.business-footer p{font-size:11px}}
+@media print{.header,.footer,.preview-bar,.skip,.legal-nav,.legal-actions,.cookie-modal,.dev-message,.modal-overlay{display:none!important}.legal{width:100%;max-width:none;padding:0}.legal h1{font-size:28pt;letter-spacing:0}.legal-body{max-width:none}.legal-body p{font-size:11pt;line-height:1.5}.legal-body h2{font-size:15pt;break-after:avoid}.legal>.text-link{display:none}body{background:white;color:black}.demo-note{break-inside:avoid}}

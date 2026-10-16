@@ -1,43 +1,75 @@
-# Projekt regulaminu zamawiania i świadczenia usług
+# Regulamin zgłoszeń i świadczenia usług Czysty Pomnik
 
-Status: roboczy, niepublikowany jako obowiązujące warunki. Uzupełnić oznaczenia w nawiasach kwadratowych, uzgodnić kwestie wymienione na końcu i wprowadzić zatwierdzoną treść do `settings.documents.regulamin` z nową wersją. Wykonawca i właściwa forma działalności nie zostały ustalone.
+Wersja: 2026-10-16. Dokument dotyczy oferty sezonowej 24–31 października 2026 r.
 
-## Wykonawca i kontakt
+## 1. Usługodawca i kontakt
 
-Usługi świadczy [pełna tożsamość wykonawcy, forma działalności, identyfikatory właściwe dla tej formy], adres [adres], e-mail [e-mail], telefon 693 429 991. Marka Czysty Pomnik nie zastępuje danych strony umowy. Kontakt w sprawach zamówienia i reklamacji: [e-mail i adres korespondencyjny].
+Usługodawcą i stroną umów jest SO SOCIAL spółka z ograniczoną odpowiedzialnością, ul. Tadeusza Kościuszki 38AH/2, 05-270 Marki, KRS 0000995470, NIP 1251739045, REGON 52330346000000, kapitał zakładowy 5 000 zł; Sąd Rejonowy dla m.st. Warszawy w Warszawie, XIV Wydział Gospodarczy Krajowego Rejestru Sądowego, dalej „Spółka”, działająca pod marką Czysty Pomnik. Adres do korespondencji i reklamacji: ul. Tadeusza Kościuszki 38AH/2, 05-270 Marki. Kontakt: czystypomnikwarszawa@gmail.com, telefon +48 693 429 991. Osoby obsługujące klientów działają w imieniu Spółki w granicach udzielonego im upoważnienia.
 
-## Zakres i ceny
+Regulamin obejmuje bezpłatne korzystanie z formularza zgłoszeniowego oraz odpłatne usługi ustalane po kontakcie telefonicznym. Chronione ustawowo prawa konsumentów, a w odpowiednim zakresie również osób fizycznych zawierających umowy związane z działalnością gospodarczą bez charakteru zawodowego, pozostają zachowane.
 
-Usługi obejmują cmentarze w Warszawie, po potwierdzeniu lokalizacji i wykonalności. Oferta sezonowa obejmuje dni 24–31 października 2026 r. Wybiera się dzień, bez konkretnej godziny. Ceny brutto dotyczą standardowego pojedynczego nagrobka granitowego ze zwykłym zabrudzeniem oraz dostępnego otoczenia do około 30 cm. Inny materiał, rozmiar lub stan wymaga osobnej wyceny uzgodnionej przed złożeniem odpłatnego zamówienia; formularz nie nalicza nieustalonych dopłat.
+## 2. Zakres oferty
 
-Silver 199 zł: ręczne mycie nagrobka, zebranie liści i zanieczyszczeń, drobnych chwastów, wskazanych wypalonych zniczy i zniszczonych kwiatów. Zdjęcia przed i po. Gold 299 zł: cały zakres Silver, jedna chryzantema w doniczce 19 cm i dwa nowe szklane znicze, ustawione i zapalone. Platinum 449 zł: mycie i porządkowanie jak w Silver, dwie chryzantemy, stroik sztuczny i trzy szklane znicze. Deklarowany czas palenia zniczy to około 36 godzin.
+Usługi wykonujemy na cmentarzach w Warszawie, po potwierdzeniu dostępu, lokalizacji i możliwości bezpiecznej realizacji. Klient wybiera dzień, bez godziny wizyty. Jedno zgłoszenie dotyczy jednego nagrobka.
 
-Usługa nie obejmuje napraw i renowacji kamienia, impregnacji ani odnowienia liter. Wykonawca ocenia bezpieczną możliwość mycia zgodnie ze stanem kamienia i warunkami pogodowymi. Nie stosuje się ogólnego wyłączenia odpowiedzialności za uszkodzenia spowodowane nienależytym wykonaniem usługi.
+Ceny brutto dotyczą standardowego pojedynczego nagrobka granitowego ze zwykłym zabrudzeniem i dostępnego otoczenia do około 30 cm.
 
-## Złożenie i przyjęcie zamówienia
+| Pakiet | Cena brutto | Zaliczka zaliczana na cenę | Pozostała kwota |
+| --- | ---: | ---: | ---: |
+| Silver | 199 zł | 50 zł | 149 zł |
+| Gold | 299 zł | 75 zł | 224 zł |
+| Platinum | 449 zł | 150 zł | 299 zł |
 
-Wymagane są aktualna przeglądarka, dostęp do internetu i e-maila. Klient wybiera pakiet, cmentarz i dzień, podaje opis dojścia, dane identyfikujące nagrobek oraz kontakt. Zdjęcia i numer kwatery są opcjonalne. Jedno zamówienie dotyczy jednego nagrobka. Klient widzi pełną cenę, zaliczkę i warunki przed wybraniem przycisku „Zamówienie z obowiązkiem zapłaty”.
+Silver obejmuje ręczne mycie nagrobka, zebranie liści i drobnych chwastów, usunięcie wskazanych wypalonych zniczy i zniszczonych kwiatów oraz zdjęcia przed i po. Gold obejmuje zakres Silver, jedną chryzantemę w doniczce 19 cm, dwa nowe szklane znicze oraz ich ustawienie i zapalenie. Platinum obejmuje mycie i porządkowanie jak w Silver, dwie chryzantemy, sztuczny stroik i trzy nowe szklane znicze, ustawione i zapalone.
 
-Złożenie formularza stanowi zamówienie wymagające przyjęcia przez wykonawcę. Automatyczny e-mail potwierdza otrzymanie zamówienia, a nie zawarcie umowy. Wykonawca kontaktuje się telefonicznie, sprawdza wykonalność i przyjmuje zamówienie. Umowa zostaje zawarta z chwilą [doprecyzować moment zgodny z procesem przyjęcia i jego utrwalenia]; przyjęcie i komplet warunków są potwierdzane e-mailem na trwałym nośniku. Nie należy oznaczać w systemie przyjęcia, jeśli nie odpowiada rzeczywistej decyzji i uzgodnieniu.
+Deklarowany czas palenia zniczy wynosi około 36 godzin; rzeczywisty zależy m.in. od pogody. Nie zapalamy zniczy wbrew zasadom cmentarza ani w warunkach zagrożenia pożarem; sposób wykonania uzgadniamy wtedy z klientem.
 
-W razie błędu dostępności klient wybiera inny dzień bez utraty pozostałych pól. Utrata odpowiedzi nie uprawnia do automatycznego tworzenia drugiej rezerwacji — system rozpoznaje ponowienie tej samej próby.
+Usługa nie obejmuje napraw, renowacji, impregnacji ani odnowienia liter. Inny materiał, rozmiar lub szczególne zabrudzenia wymagają indywidualnej oferty przed zawarciem umowy. Nie naliczamy dopłat ani nie zamieniamy uzgodnionych elementów bez akceptacji klienta. Z zakresu sprzątania nie wynika uprawnienie do usuwania pamiątek lub rzeczy niewskazanych przez klienta.
 
-## Płatności
+## 3. Formularz i zawarcie umowy
 
-Zaliczka jest płatna po telefonicznym potwierdzeniu i przyjęciu zamówienia: Silver 50 zł, Gold 75 zł, Platinum 150 zł. Zaliczka zalicza się na cenę. Instrukcje i termin zapłaty: [uzgodnić metodę, odbiorcę, dane do wpłaty i termin]. Pozostałe kwoty wynoszą 149/224/299 zł i są płatne w ciągu 24 godzin po przesłaniu zdjęć wykonanej usługi metodą [uzupełnić]. Formularz nie pobiera płatności online. Zaliczka nie jest zadatkiem ani automatycznie bezzwrotną opłatą.
+Do skorzystania z formularza potrzebne są dostęp do internetu, aktualna przeglądarka, działający adres e-mail i telefon. Klient podaje prawdziwe dane oraz informacje pozwalające odnaleźć nagrobek. Zdjęcia, uwagi i numery kwatery, rzędu lub grobu są opcjonalne, o ile pozostałe informacje wystarczają do identyfikacji. Nie wolno przesyłać treści bezprawnych, danych zbędnych ani zdjęć naruszających prawa innych osób.
 
-## Realizacja, zmiany i reklamacje
+Wysłanie formularza jest niewiążącym zgłoszeniem do kontaktu. Nie zawiera umowy odpłatnej, nie zobowiązuje do zapłaty i nie gwarantuje terminu. Automatyczne potwierdzenie dotyczy wyłącznie odbioru zgłoszenia. Klient może wycofać zgłoszenie bez opłat przez e-mail lub telefon.
 
-Wykonawca wykonuje usługę w potwierdzonym dniu w bezpiecznych warunkach mycia. Klient przekazuje dane pozwalające odnaleźć właściwy nagrobek. Brak możliwości odnalezienia wymaga kontaktu i doprecyzowania, nie fikcyjnej realizacji.
+Spółka kontaktuje się telefonicznie w sprawie zgłoszenia. Po ustaleniu szczegółów przesyła e-mailem indywidualną ofertę: pakiet i zakres, jednoznaczną lokalizację, dzień, cenę, zaliczkę i termin jej wpłaty, dane rachunku i odbiorcy oraz termin ważności oferty. Dołącza pełny regulamin, informację i formularz odstąpienia oraz politykę prywatności w postaci możliwej do zachowania przez klienta, a nie wyłącznie link do zmiennej strony.
 
-Zmiana dnia ze względu na pogodę, dostęp cmentarza lub sytuację klienta: [uzgodnić sposób kontaktu, proponowania nowego dnia i skutki braku akceptacji]. Rezygnacja poza ustawowym prawem odstąpienia: [uzgodnić zgodną z prawem regułę i sposób rozliczenia faktycznie wykonanej części]. Brak realizacji z przyczyn wykonawcy: [uzgodnić zwrot zaliczki i termin]. Nie stosować automatycznego przepadku zaliczki.
+Umowa zostaje zawarta, gdy w okresie ważności oferty Spółka otrzyma e-mail klienta jednoznacznie akceptujący tę konkretną ofertę z obowiązkiem zapłaty. Sama rozmowa, potwierdzenie otrzymania formularza lub zaznaczenie pola przy formularzu nie zastępują tej akceptacji. Istotna zmiana oferty wymaga ponownej akceptacji. Spółka potwierdza zawarcie umowy e-mailem.
 
-Reklamacje można kierować na [e-mail/adres], wskazując numer zamówienia, opis problemu i oczekiwany sposób rozpatrzenia. Termin i procedura odpowiedzi: [uzupełnić po weryfikacji właściwych obowiązków]. Nie ogranicza to praw konsumenta wynikających z przepisów.
+Jeżeli klient nie akceptuje oferty albo jej termin ważności upłynie, nie powstaje obowiązek zapłaty. Kwotę wpłaconą bez zawartej umowy zwracamy po wyjaśnieniu wpłaty, nie później niż w ciągu 14 dni od jej identyfikacji, chyba że klient następnie skutecznie zawrze umowę i zleci zaliczenie wpłaty na cenę.
 
-## Odstąpienie
+## 4. Płatności
 
-Informacja i wzór oświadczenia stanowią osobny dokument „Prawo odstąpienia”, przekazywany z przyjęciem zamówienia. Dla usługi przed upływem 14 dni system zbiera osobne, niezaznaczone domyślnie żądanie wcześniejszego rozpoczęcia i informację o konsekwencjach. Samo żądanie nie powoduje natychmiastowej utraty prawa odstąpienia.
+Formularz nie obsługuje płatności internetowych. Po konsultacji i zawarciu umowy klient wpłaca zaliczkę przelewem na rachunek wskazany przez Spółkę w indywidualnej ofercie, w terminie podanym przed akceptacją. Odbiorcą płatności jest Spółka. Tytuł przelewu powinien umożliwiać przypisanie wpłaty do zamówienia.
 
-## Warunki do rozstrzygnięcia przed publikacją
+Pozostałą należność klient płaci przelewem w ciągu 24 godzin od otrzymania zdjęć wykonanej usługi i informacji o rozliczeniu. Zaliczka jest częścią ceny, nie zadatkiem i nie jest automatycznie bezzwrotna. Spółka dokumentuje sprzedaż zgodnie z obowiązującymi przepisami i przekazuje właściwy dokument sprzedaży.
 
-Tożsamość wykonawcy, kontakt i forma działalności; moment przyjęcia umowy; sposób i termin zaliczki; reszta płatności; pogoda; dostęp i brak odnalezienia; zasady zmiany/anulowania; zwroty i reklamacje. Wersja i data obowiązywania muszą odpowiadać treści w bazie, formularzu i e-mailach.
+Brak zaliczki nie powoduje jej przepadku ani automatycznego naliczenia opłaty. Spółka kontaktuje się z klientem i przed ewentualnym odstąpieniem z powodu braku wpłaty wyznacza odpowiedni dodatkowy termin, z zachowaniem wymogów prawa. Nie rozpoczynamy odpłatnych prac bez zawartej umowy.
+
+## 5. Wykonanie, pogoda i zmiany
+
+Klient powinien być uprawniony do zlecenia czynności przy wskazanym nagrobku. Spółka wykonuje usługę z należytą starannością, z uwzględnieniem stanu kamienia, przepisów i regulaminu cmentarza. Nie wyłącza odpowiedzialności za szkody wynikające z nienależytego wykonania.
+
+W razie niejasnej lokalizacji, ograniczenia dostępu lub ryzyka uszkodzenia kontaktujemy się z klientem. Nie wykonujemy czynności przy nagrobku, którego identyfikacja budzi wątpliwości. Dodatkowe prace i koszty wymagają wcześniejszej zgody klienta.
+
+Jeżeli pogoda, brak dostępu lub inne przeszkody uniemożliwiają bezpieczne wykonanie w uzgodnionym dniu, proponujemy zmianę. Nowy termin wymaga akceptacji klienta utrwalonej e-mailem. Gdy klient go nie zaakceptuje, a usługa nie została rozpoczęta, zwracamy całą wpłatę w ciągu 14 dni. Gdy przeszkoda dotyczy części usługi, uzgadniamy dalsze wykonanie albo rozliczamy tylko prawidłowo wykonaną, przydatną klientowi część, z zachowaniem jego ustawowych uprawnień.
+
+Zdjęcia służą dokumentowaniu usługi i są przekazywane klientowi. Nie publikujemy ich reklamowo na podstawie samego zamówienia.
+
+## 6. Rezygnacja i odstąpienie
+
+Przed rozpoczęciem fizycznych prac przy nagrobku klient może zrezygnować bez opłaty; zwracamy całą wpłatę w ciągu 14 dni od rezygnacji. Jest to dodatkowe uprawnienie umowne, niezależne od ustawowego odstąpienia. Sama rezerwacja terminu lub zakup standardowych materiałów nie oznacza rozpoczęcia tych prac.
+
+Po rozpoczęciu prac rezygnację i rozliczenie ustalamy z uwzględnieniem faktycznie wykonanego zakresu oraz przepisów prawa. Nie pobieramy automatycznej kary ani opłaty za anulowanie. Ustawowe odstąpienie, jego terminy i zasady rozliczenia opisuje dokument „Prawo odstąpienia”, stanowiący część warunków umowy.
+
+## 7. Reklamacje i spory
+
+Reklamacje dotyczące usługi lub formularza można przesłać na czystypomnikwarszawa@gmail.com albo pisemnie na adres Spółki wskazany w pkt 1. Zalecamy opis problemu, dane kontaktowe, oczekiwany sposób rozwiązania i numer zgłoszenia, jeśli klient go ma. Brak numeru lub zdjęcia nie wyklucza rozpatrzenia reklamacji.
+
+Na reklamację konsumenta odpowiadamy na papierze lub innym trwałym nośniku, np. e-mailem, w ciągu 14 dni od otrzymania. Brak odpowiedzi wywołuje skutki przewidziane prawem. Odpowiedzialność za usługę i dostarczone elementy wynika również z bezwzględnie obowiązujących przepisów; regulamin jej nie ogranicza.
+
+Klient może korzystać z pomocy rzecznika konsumentów i właściwych podmiotów pozasądowego rozwiązywania sporów wskazanych przez UOKiK (https://polubowne.uokik.gov.pl). Udział Spółki w danym postępowaniu zależy od obowiązujących przepisów i jej stanowiska w konkretnej sprawie. Nie narzucamy sądu wyłącznie właściwego dla siedziby Spółki.
+
+## 8. Dane i postanowienia końcowe
+
+Zasady wykorzystywania danych, w tym kontaktu telefonicznego, określa Polityka prywatności. Zmiana opublikowanego regulaminu nie zmienia warunków już zawartych umów bez właściwej podstawy i uzgodnienia. Wersję obowiązującą dla konkretnej umowy klient otrzymuje wraz z ofertą. W sprawach nieuregulowanych stosuje się prawo polskie z zachowaniem bezwzględnie obowiązującej ochrony konsumenta.

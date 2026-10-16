@@ -17,16 +17,15 @@ export const orderSchema = z.object({
   name: z.string().trim().min(1, 'Podaj swoje imię i nazwisko').max(150),
   phone: z.string().transform(v => v.replace(/[\s()-]/g, '')).refine(v => /^\+[1-9]\d{7,14}$/.test(v), 'Podaj telefon z kodem kraju, np. +48 600 000 000'),
   email: z.email('Podaj poprawny e-mail').max(254), notes: z.string().max(2000).default(''),
-  terms: z.literal(true, 'Zaakceptuj warunki zamówienia'), earlyStart: z.boolean(), documentsVersion: z.string().min(1).max(80), website: z.string().max(0).default(''),
+  terms: z.literal(true, 'Zaakceptuj regulamin obsługi zgłoszeń'), earlyStart: z.literal(false).default(false), documentsVersion: z.string().min(1).max(80), website: z.string().max(0).default(''),
 }).strict().superRefine((v, ctx) => {
   const today = localDate();
   if (v.date < today) ctx.addIssue({ code: 'custom', path: ['date'], message: 'Wybierz przyszły dzień' });
-  const days = Math.round((Date.parse(v.date + 'T12:00:00Z') - Date.parse(today + 'T12:00:00Z')) / 86400000);
-  if (days < 14 && !v.earlyStart) ctx.addIssue({ code: 'custom', path: ['earlyStart'], message: 'Termin wymaga osobnego żądania wcześniejszego rozpoczęcia usługi' });
 });
 export type OrderInput = z.input<typeof orderSchema>;
 export type Package = { id: string; name: string; price: number; deposit: number; weight: number; description: string; features: readonly string[] };
 export type Cemetery = { id: string; name: string; address: string };
 export type Day = { date: string; remaining: number | null; closed: boolean };
-export type Config = { mode: 'demo' | 'production'; packages: Package[]; cemeteries: Cemetery[]; documentsVersion: string; business: { name: string; address: string; nip: string; phone: string; email: string }; documents: Record<string, string> };
-export const statusLabels: Record<string, string> = { pending: 'Do kontaktu', accepted: 'Przyjęte', scheduled: 'Zaplanowane', in_progress: 'W realizacji', completed: 'Zrealizowane', rejected: 'Odrzucone', cancelled: 'Anulowane', expired: 'Wygasłe' };
+export type Business = { name: string; address: string; nip: string; phone: string; email: string; krs?: string; regon?: string; shareCapital?: string; registryCourt?: string };
+export type Config = { mode: 'demo' | 'production'; packages: Package[]; cemeteries: Cemetery[]; documentsVersion: string; documentsApproved?: boolean; business: Business; documents: Record<string, string> };
+export const statusLabels: Record<string, string> = { pending: 'Zgłoszenie / oferta', accepted: 'Umowa zawarta', scheduled: 'Zaplanowane', in_progress: 'W realizacji', completed: 'Zrealizowane', rejected: 'Odrzucone', cancelled: 'Anulowane', expired: 'Wygasłe' };

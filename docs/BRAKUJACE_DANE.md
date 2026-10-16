@@ -1,12 +1,12 @@
-# Co blokuje przyjmowanie rzeczywistych zamówień
+# Pozostałe warunki startu
 
-1. Tożsamość usługodawcy i administratora danych: imię/nazwa, adres, status działalności i wymagane identyfikatory. Właściciel podał, że firma nie jest zarejestrowana. Nie rozstrzygnięto, w jakiej formie usługi będą świadczone. Nie zakładamy, że rejestracja jest jedyną dopuszczalną formą; trzeba ustalić właściwy model i odpowiednio uzupełnić walidację danych firmy.
-2. E-mail kontaktowy, adres operacyjny odbierający zamówienia, domena nadawcza i dane administratorów.
-3. Supabase/Auth/Storage i hosting backendu Node, Resend lub docelowy dostawca e-maili, domena i scheduler outbox. Podgląd Sites jest dostępny osobno i nie zastępuje tych integracji.
-4. Instrukcja wpłaty i termin zaliczki, sposób rozliczenia pozostałej należności, zasady zmiany dnia/pogody, rezygnacji, reklamacji i zwrotów. Kwoty 50/75/150 zł po potwierdzeniu są już rozstrzygnięte.
-5. Zatwierdzone dokumenty: regulamin, prywatność, odstąpienie, faktyczne cookies, retencja, dostawcy i transfery. Uzupełnić projekty z `docs/legal/` i wprowadzić pełne wersjonowane teksty do konfiguracji.
-6. Katalog wszystkich cmentarzy Warszawy i potwierdzenie otwartych dni 24–31.10.2026 oraz warunków wejścia. Właściciel ustalił brak limitu pracy, więc nie oczekujemy wymyślonych limitów. Trzeba otworzyć rekordy dni w bazie; nie wystarczy kalendarz demonstracyjny.
-7. Potwierdzenie praw do wykorzystania materiałów wizualnych w finalnej ofercie. Właściciel wskazał oznaczenie „Materiał utworzony przy użyciu SI”; podpisy są pod zdjęciami. Wizualizacja nie może być przedstawiana jako autentyczna realizacja.
-8. Testy na docelowej infrastrukturze: niezależne równoległe połączenia przy ostatnim miejscu, uprawnienia Storage/Auth, dostarczenie e-maili, backup i odtworzenie, monitoring kolejki i retencja zdjęć.
+Stan 16.10.2026. Zgoda na publikację została udzielona; nie jest potrzebna kolejna zgoda na podgląd.
 
-Zgoda na publikację została udzielona. Nie jest potrzebne ponowne zatwierdzenie publikacji podglądu. Wyłączenie zamówień wynika z braku powyższych danych i integracji.
+1. Potwierdzenie faktycznej roli i upoważnień SO SOCIAL. Rozliczanie faktur samo nie potwierdza, że spółka jest stroną umowy i administratorem danych. Dane rejestrowe zostały sprawdzone w urzędowym KRS.
+2. Rzeczywisty projekt Supabase eu-central-1 Frankfurt, migracje, Auth/Storage, konta zespołu i testy wielu niezależnych połączeń.
+3. Zweryfikowana poczta nadawcza Resend, warunki Google dla korespondencji spółki, konfiguracja Vercel i sekretów oraz harmonogram outbox/retencji. Sam import dokumentów niczego nie aktywuje.
+4. Rachunek SO SOCIAL w indywidualnych ofertach, rzeczywisty katalog cmentarzy i otwarte dni. Kwoty i brak limitów są ustalone; nie wymagają ponownego wymyślania.
+5. Przyjęcie dokumentów i zasad operacyjnych przez spółkę: retencja poza systemem, kopie, dostęp, rozliczenia i obsługa żądań klientów. Szczegóły w PUBLIKACJA.md.
+6. Odbiór integracji: wysyłka/odbicie e-maili, prywatność Storage, logowanie, retencja, odtworzenie kopii i test na fizycznym telefonie. Lokalny test nie potwierdza uruchomienia zewnętrznych usług.
+
+Pytania o role i dostępne usługi zostały skierowane do użytkownika. Do czasu odpowiedzi konfiguracja pozostaje demonstracyjna, a dokumenty są oznaczone jako projekt.
