@@ -10,7 +10,7 @@ Regulamin obejmuje bezpłatne korzystanie z formularza zgłoszeniowego oraz odp�
 
 2. Zakres oferty
 
-Usługi wykonujemy na cmentarzach w Warszawie, po potwierdzeniu dostępu, lokalizacji i możliwości bezpiecznej realizacji. Klient wybiera dzień, bez godziny wizyty. Jedno zgłoszenie dotyczy jednego nagrobka.
+Usługi wykonujemy na cmentarzach w Warszawie, po potwierdzeniu dostępu, lokalizacji i możliwości bezpiecznej realizacji. Dzień realizacji ustalamy z klientem telefonicznie, bez godziny wizyty. Formularz nie wymaga wyboru daty. Jedno zgłoszenie dotyczy jednego nagrobka.
 
 Ceny brutto dotyczą standardowego pojedynczego nagrobka granitowego ze zwykłym zabrudzeniem i dostępnego otoczenia do około 30 cm.
 

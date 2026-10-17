@@ -6,7 +6,7 @@ import {randomUUID} from 'node:crypto';
 const db=new PGlite();const c1=randomUUID(),c2=randomUUID();let sequence=0;
 const input=(cem=c1,date='2099-10-26')=>({idempotencyKey:randomUUID(),packageId:'silver',quotedPrice:19900,quotedDeposit:5000,cemeteryId:cem,date,variant:'single-granite',name:'Test',phone:'+48600000000',email:'test@example.invalid',location:'Od głównej bramy trzecia alejka w prawo.',inscription:'Osoba Testowa',sector:'',row:'',grave:'',notes:'',terms:true,earlyStart:false,documentsVersion:'test'});
 async function call(name:string,args:unknown[]){const q=await db.query<{value:any}>(`select public.${name}(${args.map((_,i)=>'$'+(i+1)).join(',')}) as value`,args);return q.rows[0]?.value;}
-async function reserve(p:ReturnType<typeof input>){return call('reserve_order',[JSON.stringify(p),JSON.stringify(p),'secret','web','test']);}
+async function reserve(p:ReturnType<typeof input>){return call('reserve_order',[JSON.stringify(p),JSON.stringify(p),'secret','phone','test']);}
 async function accept(id:string){
  await call('admin_change',[id,'offer',JSON.stringify({scope:'Uzgodniony pełny zakres testowej usługi',bankAccount:'11111111111111111111111111',validUntil:'2099-10-20T10:00:00Z',depositDue:'2099-10-21T10:00:00Z',price:19900,deposit:5000}),'test']);
  const q=await db.query<{offer_id:string}>('select offer_id from orders where id=$1',[id]);
@@ -21,6 +21,7 @@ before(async()=>{
  await db.exec(await readFile(new URL('../supabase/migrations/004_offers_and_retention.sql',import.meta.url),'utf8'));
  await db.exec(await readFile(new URL('../supabase/migrations/005_manual_mail.sql',import.meta.url),'utf8'));
  await db.exec(await readFile(new URL('../supabase/migrations/20261016180000_owner_notifications.sql',import.meta.url),'utf8'));
+ await db.exec(await readFile(new URL('../supabase/migrations/20261017094831_internal_scheduling.sql',import.meta.url),'utf8'));
  await db.query('insert into cemeteries(id,name,address) values($1,$2,$3),($4,$5,$6)',[c1,'Test A','Adres A',c2,'Test B','Adres B']);
  await db.exec(`update settings set ready=true,documents_version='test',business='{"email":"owner@example.invalid"}',documents='{"regulamin":"Test"}';`);
 });
@@ -105,4 +106,23 @@ test('automat pobiera tylko owner, chroni klientów i nie pobiera ponownie aktyw
  await db.query("update outbox set next_attempt_at=now()-interval '1 hour',attempts=8 where id=$1",[jobs.rows[0].id]);
  assert.equal((await db.query('select * from claim_owner_outbox()')).rows.length,0);
  await db.exec('set role anon');try{await assert.rejects(()=>db.query('select * from claim_owner_outbox()'),/permission denied/);}finally{await db.exec('reset role');}
+});
+
+
+test('zgłoszenia klientów bez daty nie zajmują puli i wymagają zaplanowania przed ofertą',async()=>{
+ await day('2099-12-15',20);const p=input(c1,'2099-12-15');const o=await call('reserve_order',[JSON.stringify(p),'dateless-web','secret','web','test']);
+ const q=await db.query<{date:string|null}>('select date from orders where id=$1',[o.id]);assert.equal(q.rows[0].date,null);assert.equal(await call('capacity_left',[c1,'2099-12-15',1]),20);
+ await assert.rejects(()=>call('admin_change',[o.id,'offer',JSON.stringify({}),'test']),/DATE_REQUIRED/);
+ await call('admin_change',[o.id,'assign',JSON.stringify({date:'2099-12-15'}),'test']);assert.equal(await call('capacity_left',[c1,'2099-12-15',1]),19);
+ await call('admin_change',[o.id,'assign',JSON.stringify({date:'2099-12-15'}),'test']);assert.equal(await call('capacity_left',[c1,'2099-12-15',1]),19);
+});
+test('pula 20 jest wspólna: równoczesne przypisania ostatniego miejsca nie przepełniają dnia',async()=>{
+ await day('2099-12-16',20);await day('2099-12-17',20);
+ for(let i=0;i<19;i++)await reserve(input(i%2?c1:c2,'2099-12-16'));
+ const ids:string[]=[];for(let i=0;i<4;i++){const p=input(i%2?c1:c2,'2099-12-16');const o=await call('reserve_order',[JSON.stringify(p),'pool-'+i,'secret','web','test']);ids.push(o.id);}
+ const results=await Promise.allSettled(ids.map(id=>call('admin_change',[id,'assign',JSON.stringify({date:'2099-12-16'}),'operator'])));
+ assert.equal(results.filter(r=>r.status==='fulfilled').length,1);assert.equal(results.filter(r=>r.status==='rejected').length,3);assert.equal(await call('capacity_left',[c1,'2099-12-16',1]),0);assert.equal(await call('capacity_left',[c2,'2099-12-16',1]),0);
+ const assigned=await db.query<{id:string}>('select id from orders where id=any($1::uuid[]) and date is not null',[ids]);assert.equal(assigned.rows.length,1);
+ await call('admin_change',[assigned.rows[0].id,'assign',JSON.stringify({date:'2099-12-17'}),'operator']);assert.equal(await call('capacity_left',[c1,'2099-12-16',1]),1);assert.equal(await call('capacity_left',[c2,'2099-12-17',1]),19);
+ await call('admin_change',[assigned.rows[0].id,'status',JSON.stringify({status:'cancelled',message:'Test anulowania'}),'operator']);assert.equal(await call('capacity_left',[c1,'2099-12-17',1]),20);
 });

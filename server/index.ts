@@ -135,6 +135,7 @@ app.get('/api/admin/orders/:id',wrap(async(req,res)=>{
   res.json({order:o.data,photos,history:h.data,offers:offers.data});
 }));
 const changeSchema=z.discriminatedUnion('action',[
+ z.object({action:z.literal('assign'),data:z.object({date:z.iso.date()})}),
  z.object({action:z.literal('offer'),data:offerSchema}),
  z.object({action:z.literal('contract'),data:contractSchema}),
  z.object({action:z.literal('hold'),data:z.object({reason:z.string().trim().min(10).max(1000)})}),
@@ -177,7 +178,7 @@ app.use('/api',(_req,res)=>{res.status(404).json({error:'NOT_FOUND'});});
 app.use(express.static(resolve('dist')));
 app.get('/{*path}',(_req,res)=>{res.sendFile(resolve('dist/index.html'));});
 app.use((error: Error, _req:Request,res:Response,_next:NextFunction)=>{
- const known=['MAIL_EVIDENCE_REQUIRED','NOT_READY','FULL','IDEMPOTENCY_CONFLICT','DOCUMENTS_CHANGED','PACKAGE_CHANGED','UNAUTHORIZED','RATE_LIMIT','PAST_DATE','INVALID_FILE','EARLY_START_REQUIRED','CAPACITY_BELOW_OCCUPANCY','TERMINAL_STATUS','INVALID_TRANSITION','NOT_ACCEPTED','OFFER_REQUIRED','OFFER_NOT_SENT','OFFER_EXPIRED','OFFER_INVALID','OFFER_SENDING','DELIVERY_REQUIRED','RETENTION_IN_PROGRESS','CONTRACT_EVIDENCE_REQUIRED','CONTRACT_REQUIRED','NO_DEPOSIT','ALREADY_REFUNDED','REASON_REQUIRED'];
+ const known=['DATE_REQUIRED','MAIL_EVIDENCE_REQUIRED','NOT_READY','FULL','IDEMPOTENCY_CONFLICT','DOCUMENTS_CHANGED','PACKAGE_CHANGED','UNAUTHORIZED','RATE_LIMIT','PAST_DATE','INVALID_FILE','EARLY_START_REQUIRED','CAPACITY_BELOW_OCCUPANCY','TERMINAL_STATUS','INVALID_TRANSITION','NOT_ACCEPTED','OFFER_REQUIRED','OFFER_NOT_SENT','OFFER_EXPIRED','OFFER_INVALID','OFFER_SENDING','DELIVERY_REQUIRED','RETENTION_IN_PROGRESS','CONTRACT_EVIDENCE_REQUIRED','CONTRACT_REQUIRED','NO_DEPOSIT','ALREADY_REFUNDED','REASON_REQUIRED'];
  const code=known.find(v=>error.message.includes(v));
  res.setHeader('Cache-Control','no-store');res.status(error instanceof z.ZodError ? 400 : code==='UNAUTHORIZED'?401:code==='RATE_LIMIT'?429:code==='NOT_READY'?503:code?409:500).json({error:code || (error instanceof z.ZodError?'VALIDATION_ERROR':error instanceof multer.MulterError?'INVALID_FILE':'SERVICE_UNAVAILABLE'),...(error instanceof z.ZodError?{fields:error.flatten().fieldErrors}:{})});
 });

@@ -32,3 +32,10 @@ test('telefon: polski numer bez prefiksu, wklejanie i zagraniczny kod kraju',()=
  for(const phone of ['','+48','60000000','+48 60000000','6000000000','numer telefonu','++48600000000'])assert.equal(orderSchema.safeParse({...p,phone}).success,false);
  assert.equal(normalizePhone('600 000 000'),'+48600000000');assert.equal(normalizePhone(normalizePhone('600000000')),'+48600000000');
 });
+
+
+test('formularz publiczny akceptuje zgłoszenie bez ustalonej daty',()=>{
+ const p={idempotencyKey:crypto.randomUUID(),packageId:'silver',quotedPrice:19900,quotedDeposit:5000,cemeteryId:crypto.randomUUID(),variant:'single-granite',location:'Od głównej bramy trzecia alejka w prawo',inscription:'Osoba Testowa',name:'Test',phone:'600000000',email:'test@example.invalid',terms:true,earlyStart:false,documentsVersion:'v1'};
+ assert.equal(orderSchema.safeParse(p).success,true);assert.equal(orderSchema.safeParse({...p,date:''}).success,true);
+ const m=messageFor('received',{number:1,date:null,package:{name:'Silver',price:19900},cemetery:{name:'Test',address:'Test'},documents:{business:{}}});assert.match(m.text,/Ustalimy telefonicznie/);assert.ok(!m.text.includes('1970'));
+});

@@ -10,3 +10,5 @@ test-results/
 playwright-report/
 .openai/local-state.json
 *.tar.gz
+
+supabase/.temp/

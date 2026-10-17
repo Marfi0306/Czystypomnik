@@ -56,3 +56,5 @@
 @media print{.header,.footer,.preview-bar,.skip,.legal-nav,.legal-actions,.cookie-modal,.dev-message,.modal-overlay{display:none!important}.legal{width:100%;max-width:none;padding:0}.legal h1{font-size:28pt;letter-spacing:0}.legal-body{max-width:none}.legal-body p{font-size:11pt;line-height:1.5}.legal-body h2{font-size:15pt;break-after:avoid}.legal>.text-link{display:none}body{background:white;color:black}.demo-note{break-inside:avoid}}
 
 @media(max-width:560px){.field-row.grave-fields{grid-template-columns:1fr;gap:0}.grave-fields .field{font-size:13px}.grave-fields .field small{font-size:11px}}
+
+.internal-calendar .calendar-grid>button{aspect-ratio:auto;min-height:62px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}.internal-calendar .calendar-grid>button small{font-size:9px;line-height:1.15}.internal-calendar .calendar-key{line-height:1.5}.admin .internal-calendar{margin-block:16px}

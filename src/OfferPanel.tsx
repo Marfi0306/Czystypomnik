@@ -9,6 +9,7 @@ export default function OfferPanel({order,offers,busy,action}:{order:any;offers:
  const iso=(v:string)=>new Date(v).toISOString();
  if(order.contract_at)return <section className="panel"><h3>Umowa zawarta</h3><p>{new Date(order.contract_at).toLocaleString('pl-PL')} · oferta {order.offer_id}</p><p>Odrębne żądanie wcześniejszego rozpoczęcia: {order.early_start?'utrwalone':'brak'}</p><details><summary>Dowód akceptacji e-mailowej</summary><pre>{JSON.stringify(order.contract_evidence,null,2)}</pre></details></section>;
  if(order.status!=='pending')return null;
+ if(!order.date)return <section className="panel"><h3>Oferta po konsultacji</h3><p>Najpierw wybierz i zapisz dzień w kalendarzu powyżej. Dopiero wtedy przygotuj ofertę dla klienta.</p></section>;
  return <section className="panel"><h3>Oferta po konsultacji</h3><p>Formularz klienta nie zawarł umowy. Przygotuj pełną ofertę z danymi potwierdzonymi podczas rozmowy. Terminy wprowadzasz w czasie urządzenia; wiadomość pokaże czas warszawski.</p>
  <form onSubmit={e=>{e.preventDefault();submit(()=>action('offer',{scope,bankAccount:bank,validUntil:iso(valid),depositDue:iso(due),price:Math.round(Number(price)*100),deposit:Math.round(Number(deposit)*100)}));}}>
  <label>Dokładny uzgodniony zakres<textarea required minLength={20} maxLength={4000} value={scope} onChange={e=>setScope(e.target.value)}/></label>

@@ -7,7 +7,7 @@ export function messageFor(kind:string,p:Record<string,any>){
  const titles:Record<string,string>={received:'Otrzymaliśmy zgłoszenie',owner:'Nowe zgłoszenie — skontaktuj się z klientem',offer:'Oferta do akceptacji',contract:'Potwierdzenie zawarcia umowy',deposit:'Odnotowaliśmy zaliczkę',completed:'Wykonanie i rozliczenie usługi',changed:'Aktualizacja zgłoszenia / usługi'};
  if(!titles[kind])throw new Error('UNSUPPORTED_MAIL_KIND');
  const subject=`Czysty Pomnik — ${titles[kind]} CP-${p.number}`;
- let text=`${subject}\n\nPakiet: ${p.package.name}\nCena brutto: ${money(p.package.price)}\nCmentarz: ${p.cemetery.name}, ${p.cemetery.address}\nDzień: ${dateLabel(p.date)}\n`;
+ let text=`${subject}\n\nPakiet: ${p.package.name}\nCena brutto: ${money(p.package.price)}\nCmentarz: ${p.cemetery.name}, ${p.cemetery.address}\nDzień: ${p.date?dateLabel(p.date):'Ustalimy telefonicznie'}\n`;
  const company=p.documents.business||{};
  if(kind==='received')text+='\nTo potwierdzenie otrzymania zgłoszenia, a nie zawarcia umowy lub gwarancja terminu. Skontaktujemy się telefonicznie, aby omówić realizację i przesłać ofertę e-mailem do akceptacji. Nie wpłacaj jeszcze zaliczki.\n';
  if(kind==='owner')text+=`\n${p.customer.name}\n${p.customer.phone}\n${p.customer.email}\nLokalizacja: ${p.grave.location}\nTablica: ${p.grave.inscription}\nKwatera: ${p.grave.sector}; rząd: ${p.grave.row}; grób: ${p.grave.grave}\nPanel: ${process.env.APP_ORIGIN}/admin\n`;

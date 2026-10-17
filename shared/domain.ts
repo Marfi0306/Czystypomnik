@@ -17,7 +17,7 @@ export const dateLabel = (date: string) => new Intl.DateTimeFormat('pl-PL', { da
 export const placesLabel = (n: number | null) => n === null ? 'Dostępny dzień' : `${n} ${n === 1 ? 'wolne miejsce' : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 'wolne miejsca' : 'wolnych miejsc'}`;
 const dateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/).refine(v => { const d = new Date(v + 'T12:00:00Z'); return !isNaN(+d) && d.toISOString().slice(0, 10) === v; }, 'Nieprawidłowa data');
 export const orderSchema = z.object({
-  idempotencyKey: z.uuid(), packageId: z.string().min(1).max(80), cemeteryId: z.string().min(1).max(80), date: dateSchema,
+  idempotencyKey: z.uuid(), packageId: z.string().min(1).max(80), cemeteryId: z.string().min(1).max(80), date: z.union([dateSchema,z.literal('')]).optional(),
   quotedPrice: z.number().int().positive(), quotedDeposit: z.number().int().positive(),
   variant: z.literal('single-granite'), location: z.string().trim().min(20, 'Opisz dojście do grobu (co najmniej 20 znaków)').max(1000),
   inscription: z.string().trim().min(3, 'Podaj imię i nazwisko z tablicy').max(300), sector: z.string().max(80).default(''), row: z.string().max(80).default(''), grave: z.string().max(80).default(''),
@@ -27,7 +27,7 @@ export const orderSchema = z.object({
   terms: z.literal(true, 'Zaakceptuj regulamin obsługi zgłoszeń'), earlyStart: z.literal(false).default(false), documentsVersion: z.string().min(1).max(80), website: z.string().max(0).default(''),
 }).strict().superRefine((v, ctx) => {
   const today = localDate();
-  if (v.date < today) ctx.addIssue({ code: 'custom', path: ['date'], message: 'Wybierz przyszły dzień' });
+  if (v.date && v.date < today) ctx.addIssue({ code: 'custom', path: ['date'], message: 'Wybierz przyszły dzień' });
 });
 export type OrderInput = z.input<typeof orderSchema>;
 export type Package = { id: string; name: string; price: number; deposit: number; weight: number; description: string; features: readonly string[] };

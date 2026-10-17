@@ -8,7 +8,7 @@ Administratorem danych osobowych jest SO SOCIAL spółka z ograniczoną odpowied
 
 2. Jakie informacje otrzymujemy
 
-Podajesz imię i nazwisko, telefon, adres e-mail, wybrany pakiet, preferowany dzień oraz lokalizację nagrobka i dane z tablicy ułatwiające jego identyfikację. Możesz dobrowolnie dodać numery kwatery, rzędu i grobu, uwagi oraz jedno zdjęcie. Przy zawieraniu i wykonywaniu umowy przetwarzamy także ofertę, korespondencję, oświadczenia, dane rozliczeniowe i dokumentację wykonania usługi. Dane otrzymujemy od Ciebie, a informacje o płatnościach również z rozliczeń bankowych i księgowych.
+Podajesz imię i nazwisko, telefon, adres e-mail, wybrany pakiet oraz lokalizację nagrobka i dane z tablicy ułatwiające jego identyfikację. Możesz dobrowolnie dodać numery kwatery, rzędu i grobu, uwagi oraz jedno zdjęcie. Przy zawieraniu i wykonywaniu umowy przetwarzamy także ofertę, korespondencję, oświadczenia, dane rozliczeniowe i dokumentację wykonania usługi. Dane otrzymujemy od Ciebie, a informacje o płatnościach również z rozliczeń bankowych i księgowych.
 
 Serwer hostingu przetwarza techniczne dane połączenia, m.in. adres IP, czas żądania, żądaną stronę i informacje o przeglądarce. Na potrzeby ograniczania nadużyć aplikacja zapisuje skrót adresu IP z kluczem serwera i licznik żądań. Nie zapisuje adresu IP w zgłoszeniu. Pracownikom udostępniamy dane logowania, historię czynności i informacje niezbędne do obsługi.
 
@@ -44,8 +44,9 @@ Wniosek prześlij administratorowi. Dla ochrony danych możemy poprosić o propo
 
 8. Dobrowolność i bezpieczeństwo
 
-Podanie danych jest dobrowolne, lecz dane kontaktowe, wybór usługi, dzień i informacje pozwalające odnaleźć nagrobek są niezbędne do obsługi zgłoszenia. Bez nich nie możemy ustalić realizacji. Zdjęcia i dodatkowe uwagi są opcjonalne. Strona korzysta z HTTPS, dostęp do zgłoszeń wymaga uprawnionego konta, a zdjęcia są przechowywane prywatnie i udostępniane obsłudze przez linki czasowe. Nie przesyłaj danych poufnych przez publiczne komentarze.
+Podanie danych jest dobrowolne, lecz dane kontaktowe, wybór usługi i informacje pozwalające odnaleźć nagrobek są niezbędne do obsługi zgłoszenia. Bez nich nie możemy ustalić realizacji. Zdjęcia i dodatkowe uwagi są opcjonalne. Strona korzysta z HTTPS, dostęp do zgłoszeń wymaga uprawnionego konta, a zdjęcia są przechowywane prywatnie i udostępniane obsłudze przez linki czasowe. Nie przesyłaj danych poufnych przez publiczne komentarze.
 
 9. Cookies i aktualizacje
 
 Nie korzystamy z reklamowych cookies, Meta Pixel ani zewnętrznych narzędzi analitycznych. Szczegóły pamięci przeglądarki i sesji panelu opisuje Informacja o cookies. Aktualną politykę publikujemy w stopce; wersję właściwą dla oferty otrzymasz wraz z warunkami e-mailem. Zmiana polityki nie rozszerza automatycznie celów przetwarzania wcześniej zebranych danych.
+
