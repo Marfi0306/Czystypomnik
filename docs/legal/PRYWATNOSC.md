@@ -1,6 +1,6 @@
 Polityka prywatności Czysty Pomnik
 
-Wersja: 2026-10-19-v1. Dotyczy strony https://czystypomnik.waw.pl, zgłoszeń, kontaktu i świadczenia usług Czysty Pomnik.
+Wersja: 2026-10-19-v2. Dotyczy strony https://czystypomnik.waw.pl, zgłoszeń, kontaktu i świadczenia usług Czysty Pomnik.
 
 1. Administrator i kontakt
 
@@ -20,21 +20,29 @@ Obsługa Twojego zgłoszenia, kontakt w sprawie wybranej usługi, przygotowanie 
 
 Wystawianie i przechowywanie dokumentów księgowych, obowiązki podatkowe oraz ustawowe obowiązki wobec konsumentów realizujemy na podstawie art. 6 ust. 1 lit. c RODO. Ochrona przed nadużyciami, bezpieczeństwo, prowadzenie dokumentacji ustaleń, rozpatrywanie pozostałej korespondencji oraz ustalanie, dochodzenie i obrona roszczeń opierają się na art. 6 ust. 1 lit. f RODO. Naszym uzasadnionym interesem jest bezpieczna obsługa usług, wyjaśnienie spraw i ochrona praw administratora oraz klientów.
 
-Nie wymagamy zgody marketingowej jako warunku zgłoszenia. Akceptacja regulaminu nie oznacza zgody na reklamę. Nie wysyłamy newslettera, nie prowadzimy profilowania reklamowego ani nie podejmujemy wobec Ciebie decyzji wywołujących skutki prawne wyłącznie automatycznie. Dostępność dni jest sprawdzana przez system, a warunki usługi uzgadnia człowiek.
+Nie wymagamy zgody marketingowej jako warunku zgłoszenia. Akceptacja regulaminu nie oznacza zgody na reklamę. Nie wysyłamy newslettera ani nie podejmujemy wobec Ciebie decyzji wywołujących skutki prawne wyłącznie automatycznie. Po dobrowolnej zgodzie marketingowej mierzymy skuteczność zgłoszeń przez Meta Pixel na podstawie art. 6 ust. 1 lit. a RODO oraz zgody na opcjonalną pamięć urządzenia. Odmowa i wycofanie zgody nie ograniczają formularza ani usług. Zgodę można wycofać w przycisku „Cookies i prywatność” przez odrzucenie opcjonalnych mechanizmów; wycofanie nie wpływa na zgodność wcześniejszego przetwarzania. Dostępność dni jest sprawdzana przez system, a warunki usługi uzgadnia człowiek.
 
 4. Odbiorcy danych
 
 Dostęp mają osoby obsługujące klientów i wykonujące usługę w zakresie potrzebnym do swoich zadań. Pracownik ekipy widzi wyłącznie przypisane sobie realizacje: termin, cmentarz, dane nagrobka i dojścia, zakres prac, wskazówki oraz zdjęcia. Nie otrzymuje dostępu do danych kontaktowych klienta, płatności, korespondencji ani konta koordynatora. Potwierdzenia przyjęcia, odmowy i zakończenia pracy oraz zdjęcia wykonania są zapisywane w historii obsługi. Jeśli koordynator uzupełni adres pracownika, e-mail z prośbą o potwierdzenie przypisania będzie wysyłany przez Resend; szczegóły lokalizacji pozostają w chronionym panelu. Korzystamy z Vercel Inc. do hostingu strony i API oraz Supabase do bazy, prywatnego przechowywania zdjęć i uwierzytelniania panelu. Baza projektu i pliki znajdują się w regionie Frankfurt (eu-central-1). Korespondencję z klientami prowadzimy ręcznie przez skrzynkę Gmail dostarczaną przez Google. Do automatycznego wysyłania na firmową skrzynkę powiadomień o nowych zgłoszeniach korzystamy z Resend (Plus Five Five, Inc.). Powiadomienie zawiera dane kontaktowe klienta i informacje o wybranej usłudze oraz lokalizacji nagrobka, potrzebne obsłudze; nie zawiera załączonych zdjęć. Domena wysyłkowa Resend korzysta z regionu Ireland (eu-west-1). Dane mogą otrzymać także obsługa księgowa i prawna, banki oraz uprawnione organy, gdy wynika to z prawa lub jest niezbędne do realizacji sprawy. Nie sprzedajemy danych.
 
+Po zgodzie marketingowej odbiorcą technicznych danych pomiaru jest także Meta Platforms Ireland Limited. Pixel na publicznej stronie przekazuje zdarzenie Lead po skutecznym zapisaniu zgłoszenia oraz losowy identyfikator tego zdarzenia służący deduplikacji. Połączenie z Meta może ujawniać adres IP, informacje o przeglądarce i urządzeniu, adres strony i stronę odsyłającą, identyfikatory cookies oraz kliknięcia reklamy. W zdarzeniu nie przesyłamy imienia, nazwiska, telefonu, e-maila, treści formularza, danych nagrobka, lokalizacji, zdjęć, numeru zamówienia ani kwot. Nie włączamy w kodzie automatycznego dopasowania danych kontaktowych, automatycznych zdarzeń ani PageView. Panele obsługi i ekipy są wyłączone z pomiaru.
+
+W zakresie zbierania i przekazywania danych przez narzędzia biznesowe Meta zastosowanie mają zasady współadministrowania określone w https://www.facebook.com/legal/controller_addendum. Meta może następnie łączyć dane ze swoimi usługami i wykorzystywać je zgodnie z własną polityką, w tym do pomiaru i personalizacji reklam. Więcej informacji i kontakt w sprawie praw wobec Meta: https://www.facebook.com/privacy/policy/. W sprawach naszego przetwarzania możesz zwrócić się do administratora wskazanego w pkt 1.
+
 5. Przekazywanie poza Europejski Obszar Gospodarczy
 
 Region bazy w Niemczech nie wyklucza przetwarzania przez globalnych dostawców i ich podwykonawców poza EOG, m.in. w USA. W zależności od dostawcy i transferu stosowane są decyzje Komisji Europejskiej stwierdzające odpowiedni poziom ochrony, w tym ramy EU–US Data Privacy Framework dla objętego nimi odbiorcy, albo standardowe klauzule umowne i wymagane środki uzupełniające. Informacji o właściwych zabezpieczeniach i sposobie uzyskania ich kopii udzielamy pod adresem kontaktowym administratora. Warunki dostawców: https://vercel.com/legal/dpa, https://supabase.com/legal/customer-resources/data-processing-addendum, https://policies.google.com/privacy?hl=pl oraz https://resend.com/legal/dpa. Region wysyłki w Irlandii nie oznacza, że wszystkie dane Resend pozostają w EOG; dostawca przewiduje również przetwarzanie w USA i stosowanie standardowych klauzul umownych.
+
+Dane związane z Meta Pixel mogą również być przetwarzane poza EOG, m.in. w USA, na zasadach określonych w polityce Meta i warunkach transferu: https://www.facebook.com/legal/EU_data_transfer_addendum. Nie oznacza to przekazania Meta treści zgłoszenia przechowywanego w naszej bazie.
 
 6. Okresy przechowywania
 
 Niezakończone umową zgłoszenia przechowujemy do 90 dni od ostatniego kontaktu, chyba że konkretna reklamacja, spór lub obowiązek prawny uzasadnia dłuższe zachowanie. Zdjęcia w systemie usuwamy po 90 dniach od zakończenia usługi, chyba że są nadal potrzebne do wyjaśnienia sprawy. Dane niezbędne do udokumentowania zawartej umowy i rozliczeń przechowujemy przez czas wykonania oraz do upływu właściwych terminów przedawnienia roszczeń i obowiązków prawnych; co do zasady roszczenia przedawniają się po 3 lub 6 latach, z uwzględnieniem końca roku i zdarzeń zmieniających bieg terminu. Dokumentację podatkową przechowuje się co do zasady przez 5 lat od końca roku, w którym upłynął termin płatności podatku.
 
 Treść wysłanych powiadomień w kolejce aplikacji i zwykłą historię techniczną ograniczamy do 30 dni, z wyjątkiem materiału potrzebnego do sprawy lub aktualnej oferty. Liczniki ochrony formularza wygasają po 15 minutach. Zdjęcia dołączone przez ekipę podlegają tym samym zasadom retencji co pozostała dokumentacja usługi. Wygasłe sesje pracowników są okresowo usuwane. Retencja obejmuje również przegląd korespondencji i eksportów przez obsługę. Usunięcie w aplikacji nie usuwa natychmiast danych ze skrzynek odbiorców, dokumentów księgowych ani rotacyjnych kopii bezpieczeństwa dostawców; dostęp i dalsze użycie podlegają ich przeznaczeniu i odpowiednim zasadom retencji.
+
+Decyzję dotyczącą marketingowych cookies zapamiętujemy w przeglądarce przez maksymalnie 180 dni. Losowe klucze zapobiegające powieleniu zdarzeń przechowujemy w sessionStorage do końca sesji karty. Marketingowe cookies Meta opisuje Informacja o cookies; dane po przekazaniu do Meta podlegają również okresom i zasadom przechowywania dostawcy wskazanym w jego polityce.
 
 7. Twoje prawa
 
@@ -48,4 +56,4 @@ Podanie danych jest dobrowolne, lecz dane kontaktowe, wybór usługi i informacj
 
 9. Cookies i aktualizacje
 
-Nie korzystamy z reklamowych cookies, Meta Pixel ani zewnętrznych narzędzi analitycznych. Szczegóły pamięci przeglądarki i sesji panelu opisuje Informacja o cookies. Aktualną politykę publikujemy w stopce; wersję właściwą dla oferty otrzymasz wraz z warunkami e-mailem. Zmiana polityki nie rozszerza automatycznie celów przetwarzania wcześniej zebranych danych.
+Meta Pixel jest ładowany wyłącznie po wyraźnej zgodzie marketingowej. Przed zgodą oraz po odmowie nie pobieramy zasobów Meta. Po wycofaniu zgody blokujemy dalsze zdarzenia, usuwamy niewysłane zdarzenia oczekujące w kolejce aplikacji i dostępne cookies Meta w naszej domenie. Wycofanie nie usuwa danych już przekazanych dostawcy; prawa wobec tych danych opisuje również polityka Meta. Nie wysyłamy z opóźnieniem zgłoszeń z okresu bez zgody. Nie stosujemy innych zewnętrznych narzędzi analitycznych ani nagrywania sesji. Szczegóły pamięci przeglądarki i sesji panelu opisuje Informacja o cookies. Aktualną politykę publikujemy w stopce; wersję właściwą dla oferty otrzymasz wraz z warunkami e-mailem. Zmiana polityki nie rozszerza automatycznie celów przetwarzania wcześniej zebranych danych.

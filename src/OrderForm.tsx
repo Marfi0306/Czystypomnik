@@ -40,7 +40,7 @@ export default function OrderForm({config,selected,onSelect,manual=false,onDone}
    // Powtórzenie po niepewnej odpowiedzi wysyła ten sam klucz i dokładnie te same dane.
    const input=attempt.current.payload || payload();attempt.current.payload=input;
    const result=await api(manual?'/admin/orders':'/orders',manual?{order:input,source}:input);
-   setSubmitted(input);setUncertain(false);setReceipt(result);track(!demo,'order_saved',{orderNumber:result.number});
+   setSubmitted(input);setUncertain(false);setReceipt(result);track(!demo&&!manual,'order_saved',{orderNumber:result.number,submissionId:attempt.current.key});
    if(!manual)try{await uploadPhotos(result.id,result.uploadToken);}catch{setPhotoError('Zgłoszenie zapisano. Zdjęcia nie zostały dodane — możesz ponowić ich wysłanie.');}
    onDone?.();
   }catch(e){setError(errorText(e));if(e instanceof Error && ['FULL','DOCUMENTS_CHANGED','VALIDATION_ERROR','PACKAGE_CHANGED','NOT_READY','RATE_LIMIT'].includes(e.message)){attempt.current={key:crypto.randomUUID()};setUncertain(false);}else setUncertain(true);}

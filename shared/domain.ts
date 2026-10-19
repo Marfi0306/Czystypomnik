@@ -34,5 +34,5 @@ export type Package = { id: string; name: string; price: number; deposit: number
 export type Cemetery = { id: string; name: string; address: string };
 export type Day = { date: string; remaining: number | null; closed: boolean };
 export type Business = { name: string; address: string; nip: string; phone: string; email: string; krs?: string; regon?: string; shareCapital?: string; registryCourt?: string };
-export type Config = { mode: 'demo' | 'production'; packages: Package[]; cemeteries: Cemetery[]; documentsVersion: string; documentsApproved?: boolean; mailMode?: 'manual' | 'resend'; business: Business; documents: Record<string, string> };
+export type Config = { mode: 'demo' | 'production'; packages: Package[]; cemeteries: Cemetery[]; documentsVersion: string; documentsApproved?: boolean; mailMode?: 'manual' | 'resend'; business: Business; documents: Record<string, string>;tracking?:{metaPixelId:string} };
 export const statusLabels: Record<string, string> = { pending: 'Zgłoszenie / oferta', accepted: 'Umowa zawarta', scheduled: 'Zaplanowane', in_progress: 'W realizacji', completed: 'Zrealizowane', rejected: 'Odrzucone', cancelled: 'Anulowane', expired: 'Wygasłe' };

@@ -66,3 +66,4 @@
 .assign-panel{position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(560px,calc(100% - 32px));max-height:85vh;overflow:auto;box-shadow:0 0 0 100vmax #0b1b3666,0 14px 70px #0b1b3644;margin:0}
 
 @media print{.cookie-notice,.cookie-settings{display:none!important}}
+.cookie-actions{display:flex;flex-direction:column;gap:9px;flex:0 0 230px}.cookie-actions .button{width:100%;min-height:46px}.cookie-options{margin:12px 0;padding:12px;border:1px solid #d8d1bf;border-radius:4px}.cookie-options .checkbox{font-size:13px}.cookie-options .checkbox input{flex-shrink:0}@media(max-width:600px){.cookie-actions{flex:auto}.cookie-notice{max-height:85vh}}

@@ -17,7 +17,7 @@ const app = express();
 app.disable('x-powered-by');
 app.set('trust proxy', Number(process.env.TRUST_PROXY_HOPS || 0));
 app.use(express.json({ limit: '32kb' })); app.use(cookieParser(process.env.COOKIE_SECRET));
-app.use((_req,res,next) => { res.set({ 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'strict-origin-when-cross-origin', 'Permissions-Policy': 'camera=(), microphone=(), geolocation=()', 'X-Frame-Options': 'DENY', 'Content-Security-Policy': "default-src 'self'; img-src 'self' blob: data: https://*.supabase.co; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'" }); next(); });
+app.use((req,res,next) => { const pixelDocument=req.path==='/';res.set({ 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'strict-origin-when-cross-origin', 'Permissions-Policy': 'camera=(), microphone=(), geolocation=()', 'X-Frame-Options': 'DENY', 'Content-Security-Policy': `default-src 'self'; img-src 'self' blob: data: https://*.supabase.co${pixelDocument?" https://www.facebook.com":""}; script-src 'self'${pixelDocument?" https://connect.facebook.net":""}; style-src 'self' 'unsafe-inline'; connect-src 'self'${pixelDocument?" https://www.facebook.com":""}; frame-ancestors 'none'; base-uri 'self'; form-action 'self'` }); next(); });
 const wrap = (fn: (req: Request,res: Response,next: NextFunction) => Promise<unknown>) => (req: Request,res: Response,next: NextFunction) => { Promise.resolve(fn(req,res,next)).catch(next); };
 app.get('/api/health',wrap(async(_req,res)=>{
  if(!db){res.status(503).json({status:'unavailable',database:'not-configured'});return;}
@@ -53,7 +53,7 @@ app.get('/api/config',wrap(async (_req,res)=>{
   if (!s) { res.json({ mode:'demo' }); return; }
   const [p,c]=await Promise.all([db!.from('packages').select('id,name,price,deposit,weight,description,features').eq('active',true).order('price'),db!.from('cemeteries').select('id,name,address').eq('active',true).order('name')]);
   if(p.error||c.error) throw new Error('DATABASE_UNAVAILABLE');
-  res.json({mode:'production',packages:p.data,cemeteries:c.data,business:s.business,documents:s.documents,documentsVersion:s.documents_version,documentsApproved:true,mailMode:process.env.MAIL_MODE});
+  res.json({mode:'production',packages:p.data,cemeteries:c.data,business:s.business,documents:s.documents,documentsVersion:s.documents_version,documentsApproved:true,mailMode:process.env.MAIL_MODE,tracking:{metaPixelId:/^\d{5,25}$/.test(process.env.META_PIXEL_ID||'')?process.env.META_PIXEL_ID:''}});
 }));
 app.get('/api/availability',wrap(async(req,res)=>{
   if(!await readySettings()) throw new Error('NOT_READY');

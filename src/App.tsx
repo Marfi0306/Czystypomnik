@@ -7,6 +7,7 @@ import Admin from './Admin';
 import Crew from './Crew';
 import Legal,{documentTitles} from './Legal';
 import {track} from './analytics';
+import {configureMarketing} from './marketing';
 function Arrow(){return <span aria-hidden="true">↗</span>;}
 function ServiceIcon({kind}:{kind:'calendar'|'camera'|'wallet'}){return <svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{kind==='calendar'?<><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 10h18M8 15h2m4 0h2"/></>:kind==='camera'?<><path d="M8 5l1.5-2h5L16 5h4a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z"/><circle cx="12" cy="12.5" r="4"/><path d="M17.5 8h.5"/></>:<><path d="M4 6h14V3L4 6a2 2 0 0 0-1 2v11a2 2 0 0 0 2 2h15V7H5a2 2 0 0 1-2-2"/><path d="M20 11h-5v6h5m-3-3h.01"/></>}</svg>;}
 
@@ -14,6 +15,7 @@ function Brand(){return <a className="brand" href="/" aria-label="Czysty Pomnik 
 export default function App(){
  const [resolved,setResolved]=useState(false);const [config,setConfig]=useState<Config>(demoConfig);const [selected,setSelected]=useState('');const [slider,setSlider]=useState(50);const [menu,setMenu]=useState(false);const [connectionError,setConnectionError]=useState(false);
  useEffect(()=>{let active=true;fetch('/api/config').then(async r=>{if(!r.ok)throw new Error();const c=await r.json();if(active&&c.mode==='production')setConfig(c);}).catch(()=>{if(active)setConnectionError(true);}).finally(()=>{if(active)setResolved(true);});return()=>{active=false;};},[]);
+ useEffect(()=>{configureMarketing(config.mode==='production'?config.tracking?.metaPixelId:undefined);},[config.mode,config.tracking?.metaPixelId]);
  const demo=config.mode==='demo';const path=location.pathname;
  const docs=documentTitles;const doc=path.split('/')[2];
  function select(id:string){setSelected(id);track(!demo,'package_selected',{packageId:id});document.getElementById('formularz')?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'});}
