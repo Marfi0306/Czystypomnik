@@ -67,3 +67,5 @@
 
 @media print{.cookie-notice,.cookie-settings{display:none!important}}
 .cookie-actions{display:flex;flex-direction:column;gap:9px;flex:0 0 230px}.cookie-actions .button{width:100%;min-height:46px}.cookie-options{margin:12px 0;padding:12px;border:1px solid #d8d1bf;border-radius:4px}.cookie-options .checkbox{font-size:13px}.cookie-options .checkbox input{flex-shrink:0}@media(max-width:600px){.cookie-actions{flex:auto}.cookie-notice{max-height:85vh}}
+
+.crew .password-visibility{min-height:44px;margin-bottom:16px;padding:10px 16px}.crew .login-help{font-size:14px;line-height:1.6;margin:0 0 20px}

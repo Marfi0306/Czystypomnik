@@ -27,5 +27,7 @@ test('hasło robocze blokuje dane; zmiana hasła unieważnia starą sesję',asyn
  const login=await post('/api/worker/login',{login:'kamil',password:f.testPassword});const cookie=login.headers.get('set-cookie')!.split(';')[0];assert.equal((await fetch(f.base+'/api/worker/orders',{headers:{cookie}})).status,403);
  assert.equal((await post('/api/worker/password',{currentPassword:f.testPassword,password:'Changed-fixture-password-123!'},cookie)).status,200);
  assert.equal((await fetch(f.base+'/api/worker/me',{headers:{cookie}})).status,401);assert.equal((await post('/api/worker/login',{login:'kamil',password:f.testPassword})).status,401);
- assert.equal((await post('/api/worker/login',{login:'kamil',password:'Changed-fixture-password-123!'})).status,200);
+ const relogin=await post('/api/worker/login',{login:'kamil',password:'Changed-fixture-password-123!'});assert.equal(relogin.status,200);const newCookie=relogin.headers.get('set-cookie')!.split(';')[0];
+ const profile=await fetch(f.base+'/api/worker/me',{headers:{cookie:newCookie}});assert.equal(profile.status,200);assert.equal((await profile.json()).mustChangePassword,false);
+ const work=await fetch(f.base+'/api/worker/orders',{headers:{cookie:newCookie}});assert.equal(work.status,200);assert.deepEqual((await work.json()).orders.map((o:any)=>o.id),[f.order2]);
 });
