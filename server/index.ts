@@ -12,6 +12,7 @@ import { orderSchema } from '../shared/domain';
 import { termsStatement } from '../shared/consent';
 import {offerSchema,contractSchema} from '../shared/offers';
 import {runRetention} from './retention';
+import {crewRouter} from './crew';
 const app = express();
 app.disable('x-powered-by');
 app.set('trust proxy', Number(process.env.TRUST_PROXY_HOPS || 0));
@@ -46,6 +47,7 @@ async function rate(req: Request, kind: string) {
   const key = createHmac('sha256',process.env.IP_HASH_SECRET).update(`${kind}:${req.ip}`).digest('hex');
   if (!await rpc('take_rate',{ p_key:key })) throw new Error('RATE_LIMIT');
 }
+app.use('/api/worker',crewRouter(origin,rate));
 app.get('/api/config',wrap(async (_req,res)=>{
   const s=await readySettings();
   if (!s) { res.json({ mode:'demo' }); return; }
@@ -121,7 +123,7 @@ app.post('/api/internal/setup-admin',wrap(async(req,res)=>{
 app.post('/api/admin/logout',origin,(req,res)=>{res.clearCookie('cp_session',{path:'/api/admin'}).json({ok:true});});
 app.get('/api/admin/orders',wrap(async(req,res)=>{
   await actor(req);
-  const {data,error}=await db!.from('orders').select('id,number,date,status,source,customer,cemetery_snapshot,package_snapshot,grave_details,notes,internal_note,attention,followup_at,payment_status,deposit_received,deposit_refunded,created_at').order('created_at',{ascending:false}).limit(1000);
+  const {data,error}=await db!.from('orders').select('id,number,date,status,source,customer,cemetery_snapshot,package_snapshot,grave_details,notes,internal_note,attention,followup_at,payment_status,deposit_received,deposit_refunded,created_at,worker_id,assignment_state,assignment_version,work_completed_at').order('created_at',{ascending:false}).limit(1000);
   if(error) throw new Error('DATABASE_UNAVAILABLE');
   const [mail, cem, pkg]=await Promise.all([db!.from('outbox').select('id,order_id,state,attempts,last_error,kind,recipient').neq('state','sent').limit(1000),db!.from('cemeteries').select('*'),db!.from('packages').select('*')]);
   if(mail.error||cem.error||pkg.error) throw new Error('DATABASE_UNAVAILABLE');
@@ -134,6 +136,11 @@ app.get('/api/admin/orders/:id',wrap(async(req,res)=>{
   const photos=await Promise.all(a.data.map(async f=>{const {data,error}=await db!.storage.from('grave-photos').createSignedUrl(f.path,300); if(error) throw new Error('PHOTO_UNAVAILABLE'); return {id:f.id,url:data.signedUrl};}));
   res.json({order:o.data,photos,history:h.data,offers:offers.data});
 }));
+app.get('/api/admin/team',wrap(async(req,res)=>{await actor(req);const {data,error}=await db!.from('workers').select('id,name,login,email,active').order('name');if(error)throw new Error('DATABASE_UNAVAILABLE');res.json({workers:data});}));
+app.post('/api/admin/team/:id',origin,wrap(async(req,res)=>{const user=await actor(req);const b=z.object({email:z.union([z.email(),z.literal('')]),active:z.boolean()}).strict().parse(req.body);await rpc('configure_worker',{p_worker:z.uuid().parse(req.params.id),p_email:b.email,p_active:b.active,p_actor:user});res.json({ok:true});}));
+app.post('/api/admin/orders/:id/worker',origin,wrap(async(req,res)=>{const user=await actor(req);const b=z.object({workerId:z.uuid().nullable()}).strict().parse(req.body);await rpc('assign_worker',{p_order:z.uuid().parse(req.params.id),p_worker:b.workerId,p_actor:user});res.json({ok:true});}));
+app.get('/api/admin/calendar',wrap(async(req,res)=>{await actor(req);const b=z.object({from:z.iso.date(),to:z.iso.date()}).refine(b=>b.to>=b.from&&(Date.parse(b.to)-Date.parse(b.from))<=62*86400000).parse(req.query);
+ const [o,t,w]=await Promise.all([db!.from('orders').select('id,number,date,status,worker_id,assignment_state,assignment_version,work_completed_at,cemetery_snapshot,package_snapshot,grave_details,notes').gte('date',b.from).lte('date',b.to).order('number').limit(2000),db!.from('team_days').select('*').gte('date',b.from).lte('date',b.to),db!.from('workers').select('id,name,login,email,active').order('name')]);if(o.error||t.error||w.error)throw new Error('DATABASE_UNAVAILABLE');res.json({orders:o.data,days:t.data,workers:w.data});}));
 const changeSchema=z.discriminatedUnion('action',[
  z.object({action:z.literal('assign'),data:z.object({date:z.iso.date()})}),
  z.object({action:z.literal('offer'),data:offerSchema}),
@@ -179,7 +186,8 @@ app.use(express.static(resolve('dist')));
 app.get('/{*path}',(_req,res)=>{res.sendFile(resolve('dist/index.html'));});
 app.use((error: Error, _req:Request,res:Response,_next:NextFunction)=>{
  const known=['DATE_REQUIRED','MAIL_EVIDENCE_REQUIRED','NOT_READY','FULL','IDEMPOTENCY_CONFLICT','DOCUMENTS_CHANGED','PACKAGE_CHANGED','UNAUTHORIZED','RATE_LIMIT','PAST_DATE','INVALID_FILE','EARLY_START_REQUIRED','CAPACITY_BELOW_OCCUPANCY','TERMINAL_STATUS','INVALID_TRANSITION','NOT_ACCEPTED','OFFER_REQUIRED','OFFER_NOT_SENT','OFFER_EXPIRED','OFFER_INVALID','OFFER_SENDING','DELIVERY_REQUIRED','RETENTION_IN_PROGRESS','CONTRACT_EVIDENCE_REQUIRED','CONTRACT_REQUIRED','NO_DEPOSIT','ALREADY_REFUNDED','REASON_REQUIRED'];
+ known.push('NOT_FOUND','PASSWORD_CHANGE_REQUIRED','WORK_DAY_REQUIRED','COMPLETION_PHOTO_REQUIRED');
  const code=known.find(v=>error.message.includes(v));
- res.setHeader('Cache-Control','no-store');res.status(error instanceof z.ZodError ? 400 : code==='UNAUTHORIZED'?401:code==='RATE_LIMIT'?429:code==='NOT_READY'?503:code?409:500).json({error:code || (error instanceof z.ZodError?'VALIDATION_ERROR':error instanceof multer.MulterError?'INVALID_FILE':'SERVICE_UNAVAILABLE'),...(error instanceof z.ZodError?{fields:error.flatten().fieldErrors}:{})});
+ res.setHeader('Cache-Control','no-store');res.status(error instanceof z.ZodError ? 400 : code==='UNAUTHORIZED'?401:code==='NOT_FOUND'?404:code==='PASSWORD_CHANGE_REQUIRED'?403:code==='RATE_LIMIT'?429:code==='NOT_READY'?503:code?409:500).json({error:code || (error instanceof z.ZodError?'VALIDATION_ERROR':error instanceof multer.MulterError?'INVALID_FILE':'SERVICE_UNAVAILABLE'),...(error instanceof z.ZodError?{fields:error.flatten().fieldErrors}:{})});
 });
 export default app;

@@ -4,6 +4,7 @@ import {earlyStartStatement} from '../shared/consent';
 const moment=(v:string)=>new Intl.DateTimeFormat('pl-PL',{dateStyle:'long',timeStyle:'short',timeZone:'Europe/Warsaw'}).format(new Date(v))+' (Europe/Warsaw)';
 const documents=(p:Record<string,any>)=>`Pełne warunki, wersja ${p.version}:\n`+Object.entries(p.texts).map(([key,value])=>`${key.toUpperCase()}\n${value}`).join('\n\n');
 export function messageFor(kind:string,p:Record<string,any>){
+ if(kind==='worker_assignment')return {subject:`Czysty Pomnik — przypisano realizację CP-${p.number}`,text:`Cześć ${p.workerName},\n\nPrzypisano Ci realizację CP-${p.number} na ${dateLabel(p.date)}. Zaloguj się do swojego panelu, sprawdź lokalizację i zakres pracy oraz zaznacz „Przyjęte” albo „Nieprzyjęte”.\n\n${process.env.APP_ORIGIN}/ekipa\n\nPo zakończeniu dodaj zdjęcie i oznacz realizację jako zrealizowaną. Szczegóły są dostępne wyłącznie po zalogowaniu.`};
  const titles:Record<string,string>={received:'Otrzymaliśmy zgłoszenie',owner:'Nowe zgłoszenie — skontaktuj się z klientem',offer:'Oferta do akceptacji',contract:'Potwierdzenie zawarcia umowy',deposit:'Odnotowaliśmy zaliczkę',completed:'Wykonanie i rozliczenie usługi',changed:'Aktualizacja zgłoszenia / usługi'};
  if(!titles[kind])throw new Error('UNSUPPORTED_MAIL_KIND');
  const subject=`Czysty Pomnik — ${titles[kind]} CP-${p.number}`;
@@ -28,10 +29,11 @@ export function messageFor(kind:string,p:Record<string,any>){
 export const ownerRecipient = 'czystypomnikwarszawa@gmail.com';
 export async function processOutbox(ownerOnly = process.env.MAIL_MODE !== 'resend') {
   if (!db || !process.env.RESEND_API_KEY || !process.env.MAIL_FROM) throw new Error('NOT_READY');
-  const jobs = await rpc(ownerOnly ? 'claim_owner_outbox' : 'claim_outbox'); let sent = 0;
+  const jobs = await rpc(ownerOnly ? 'claim_team_outbox' : 'claim_outbox'); let sent = 0;
   for (const job of jobs) {
     try {
-      if (ownerOnly && (job.kind !== 'owner' || job.recipient !== ownerRecipient)) throw new Error('MAIL_RECIPIENT_DENIED');
+      if(job.kind==='worker_assignment'){if(!await rpc('worker_mail_valid',{p_id:job.id})){await db.from('outbox').update({state:'cancelled',payload:{},last_error:'SUPERSEDED_ASSIGNMENT'}).eq('id',job.id);continue;}}
+      else if (ownerOnly && (job.kind !== 'owner' || job.recipient !== ownerRecipient)) throw new Error('MAIL_RECIPIENT_DENIED');
       const mail = messageFor(job.kind, job.payload);
       const response = await fetch('https://api.resend.com/emails', { method: 'POST', headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json', 'Idempotency-Key': job.id }, body: JSON.stringify({ from: process.env.MAIL_FROM, reply_to:process.env.MAIL_REPLY_TO||ownerRecipient, to: [job.kind === 'owner' ? ownerRecipient : job.recipient], ...mail }), signal: AbortSignal.timeout(15000) });
       if (!response.ok) throw new Error(`MAIL_HTTP_${response.status}`);

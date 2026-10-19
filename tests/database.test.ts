@@ -22,10 +22,43 @@ before(async()=>{
  await db.exec(await readFile(new URL('../supabase/migrations/005_manual_mail.sql',import.meta.url),'utf8'));
  await db.exec(await readFile(new URL('../supabase/migrations/20261016180000_owner_notifications.sql',import.meta.url),'utf8'));
  await db.exec(await readFile(new URL('../supabase/migrations/20261017094831_internal_scheduling.sql',import.meta.url),'utf8'));
+ await db.exec(await readFile(new URL('../supabase/migrations/20261019063107_crew_calendar.sql',import.meta.url),'utf8'));
  await db.query('insert into cemeteries(id,name,address) values($1,$2,$3),($4,$5,$6)',[c1,'Test A','Adres A',c2,'Test B','Adres B']);
  await db.exec(`update settings set ready=true,documents_version='test',business='{"email":"owner@example.invalid"}',documents='{"regulamin":"Test"}';`);
 });
 after(async()=>{await db.close();});
+test('ekipa: zakres danych, przyjęcie, odmowa, ponowne przypisanie i izolacja kont',async()=>{
+ const w1=randomUUID(),w2=randomUUID();await db.query("insert into workers(id,login,name,password_hash,password_salt,must_change_password) values($1,'szymon','Szymon',$3,'salt',false),($2,'kamil','Kamil',$3,'salt',false)",[w1,w2,'a'.repeat(128)]);
+ await day('2099-12-20',20);const o=await reserve(input(c1,'2099-12-20'));await call('assign_worker',[o.id,w1,'owner']);
+ let rows=await call('crew_orders',[w1]);assert.equal(rows.length,1);assert.equal(rows[0].id,o.id);assert.equal(rows[0].customer,undefined);assert.equal(rows[0].package_snapshot.price,undefined);assert.equal(rows[0].internal_note,undefined);assert.equal(rows[0].documents_snapshot,undefined);assert.deepEqual(await call('crew_orders',[w2]),[]);
+ let version=rows[0].assignment_version;await assert.rejects(()=>call('crew_change',[w2,o.id,version,'accept','']),/NOT_FOUND/);await call('crew_change',[w1,o.id,version,'accept','']);await call('crew_change',[w1,o.id,version,'accept','']);
+ await call('crew_change',[w1,o.id,version,'decline','Nie mogę zrealizować']);assert.equal((await call('crew_orders',[w1]))[0].assignment_state,'declined');
+ await call('assign_worker',[o.id,w2,'owner']);assert.deepEqual(await call('crew_orders',[w1]),[]);await assert.rejects(()=>call('crew_check',[w1,o.id,version]),/NOT_FOUND/);
+ rows=await call('crew_orders',[w2]);assert.notEqual(rows[0].assignment_version,version);version=rows[0].assignment_version;await call('crew_change',[w2,o.id,version,'accept','']);
+ await call('admin_change',[o.id,'assign',JSON.stringify({date:'2099-12-21'}),'owner']).catch(async()=>{await day('2099-12-21',20);await call('admin_change',[o.id,'assign',JSON.stringify({date:'2099-12-21'}),'owner']);});
+ await assert.rejects(()=>call('crew_change',[w2,o.id,version,'accept','']),/NOT_FOUND/);assert.equal((await call('crew_orders',[w2]))[0].assignment_state,'awaiting');
+ await db.query('update workers set active=false where id=$1',[w2]);assert.deepEqual(await call('crew_orders',[w2]),[]);
+});
+test('ekipa: wymagane własne hasło, zdjęcie i dzień pracy; ukończenie nie zmienia rozliczeń',async()=>{
+ const w=randomUUID();await db.query("insert into workers(id,login,name,password_hash,password_salt) values($1,'julian','Julian',$2,'salt')",[w,'a'.repeat(128)]);
+ await day('2099-12-22',20);const o=await reserve(input(c1,'2099-12-22'));await call('assign_worker',[o.id,w,'owner']);assert.deepEqual(await call('crew_orders',[w]),[]);
+ await db.query("insert into worker_sessions(token_hash,worker_id,expires_at) values('session-test',$1,now()+interval '1 hour')",[w]);await call('crew_password',[w,'a'.repeat(128),'b'.repeat(128),'new-salt']);assert.equal((await db.query('select * from worker_sessions where worker_id=$1',[w])).rows.length,0);
+ await accept(o.id);let row=(await call('crew_orders',[w]))[0];const version=row.assignment_version;await call('crew_change',[w,o.id,version,'accept','']);
+ await assert.rejects(()=>call('crew_change',[w,o.id,version,'complete','']),/WORK_DAY_REQUIRED/);
+ const today=(await db.query<{d:string}>("select (now() at time zone 'Europe/Warsaw')::date::text d")).rows[0].d;
+ await db.query('update orders set date=$1 where id=$2',[today,o.id]);row=(await call('crew_orders',[w]))[0];await call('crew_change',[w,o.id,row.assignment_version,'accept','']);
+ await assert.rejects(()=>call('crew_change',[w,o.id,row.assignment_version,'complete','']),/COMPLETION_PHOTO_REQUIRED/);
+ await call('crew_photo',[w,o.id,row.assignment_version,`${o.id}/completion/${row.assignment_version}/proof.webp`,1000]);await call('crew_change',[w,o.id,row.assignment_version,'complete','']);await call('crew_change',[w,o.id,row.assignment_version,'complete','']);
+ const done=await db.query<any>('select assignment_state,status,deposit_received,work_completed_at from orders where id=$1',[o.id]);assert.equal(done.rows[0].assignment_state,'completed');assert.equal(done.rows[0].status,'in_progress');assert.equal(done.rows[0].deposit_received,0);assert.ok(done.rows[0].work_completed_at);
+ await db.exec('set role authenticated');try{for(const t of ['workers','worker_sessions'])await assert.rejects(()=>db.query(`select * from ${t}`),/permission denied/);await assert.rejects(()=>call('crew_orders',[w]),/permission denied/);}finally{await db.exec('reset role');}
+});
+test('powiadomienia ekipy: brak adresu nie tworzy fałszywej wysyłki, adres uruchamia kolejkę i ponowne przypisanie unieważnia starą',async()=>{
+ const w=randomUUID();await db.query("insert into workers(id,login,name,password_hash,password_salt,must_change_password) values($1,'mail-worker','Test',$2,'salt',false)",[w,'a'.repeat(128)]);await day('2099-12-23',20);const o=await reserve(input(c1,'2099-12-23'));await call('assign_worker',[o.id,w,'owner']);
+ assert.equal((await db.query("select id from outbox where order_id=$1 and kind='worker_assignment'",[o.id])).rows.length,0);
+ await call('configure_worker',[w,'worker@example.invalid',true,'owner']);const m=(await db.query<any>("select * from outbox where order_id=$1 and kind='worker_assignment'",[o.id])).rows[0];assert.equal(m.recipient,'worker@example.invalid');assert.equal(m.payload.customer,undefined);assert.equal(await call('worker_mail_valid',[m.id]),true);
+ await call('configure_worker',[w,'worker@example.invalid',true,'owner']);assert.equal((await db.query<any>('select state from outbox where id=$1',[m.id])).rows[0].state,'pending');
+ await call('assign_worker',[o.id,null,'owner']);assert.equal(await call('worker_mail_valid',[m.id]),false);assert.equal((await db.query<any>('select state from outbox where id=$1',[m.id])).rows[0].state,'cancelled');
+});
 test('10 miejsc i 5 rezerwacji daje 5; ponowienie nie tworzy zajęcia ani e-maili',async()=>{await day('2099-10-26',10);const first=input();const o=await reserve(first);for(let i=0;i<4;i++)await reserve(input());assert.equal(await call('capacity_left',[c1,'2099-10-26',1]),5);assert.equal((await reserve(first)).id,o.id);const rows=await db.query<{n:number}>('select count(*)::int n from outbox where order_id=$1',[o.id]);assert.equal(rows.rows[0].n,2);await assert.rejects(()=>reserve({...first,name:'Inna osoba'}),/IDEMPOTENCY_CONFLICT/);});
 test('wiele prób na ostatnie miejsce: jedna rezerwacja',async()=>{await day('2099-10-27',1);const result=await Promise.allSettled(Array.from({length:6},()=>reserve(input(c1,'2099-10-27'))));assert.equal(result.filter(r=>r.status==='fulfilled').length,1);assert.equal(result.filter(r=>r.status==='rejected').length,5);});
 test('podwójne anulowanie zwalnia tylko raz',async()=>{await day('2099-10-28',2);const o=await reserve(input(c1,'2099-10-28'));await call('admin_change',[o.id,'status',JSON.stringify({status:'cancelled',message:'Test anulowania'}),'test']);await call('admin_change',[o.id,'status',JSON.stringify({status:'cancelled',message:'Test anulowania'}),'test']);assert.equal(await call('capacity_left',[c1,'2099-10-28',1]),2);});

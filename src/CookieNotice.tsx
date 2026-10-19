@@ -1,0 +1,5 @@
+import {useState} from 'react';
+const key='cp_cookie_notice_v1';
+function dismissed(){try{const time=Number(localStorage.getItem(key));return time>0&&Date.now()-time<365*86400000;}catch{return false;}}
+export default function CookieNotice(){const [open,setOpen]=useState(()=>!dismissed());function close(){try{localStorage.setItem(key,String(Date.now()));}catch{/* Informacja działa również przy zablokowanej pamięci. */}setOpen(false);}
+return open?<aside className="cookie-notice" aria-labelledby="cookie-title"><div><h2 id="cookie-title">Twoja prywatność</h2><p>Korzystamy wyłącznie z niezbędnych mechanizmów pamięci: do bezpiecznego logowania w panelach i zapamiętania zamknięcia tej informacji. Nie używamy cookies reklamowych ani zewnętrznej analityki.</p><p><a href="/dokumenty/cookies">Informacja o cookies</a> · <a href="/dokumenty/prywatnosc">Polityka prywatności</a></p></div><button className="button primary" onClick={close}>Rozumiem</button></aside>:<button className="cookie-settings" onClick={()=>setOpen(true)}>Cookies i prywatność</button>;}

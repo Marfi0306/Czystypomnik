@@ -4,6 +4,7 @@ import { money } from '../shared/domain';
 import { demoConfig } from './demo';
 import OrderForm from './OrderForm';
 import Admin from './Admin';
+import Crew from './Crew';
 import Legal,{documentTitles} from './Legal';
 import {track} from './analytics';
 function Arrow(){return <span aria-hidden="true">↗</span>;}
@@ -16,6 +17,7 @@ export default function App(){
  const demo=config.mode==='demo';const path=location.pathname;
  const docs=documentTitles;const doc=path.split('/')[2];
  function select(id:string){setSelected(id);track(!demo,'package_selected',{packageId:id});document.getElementById('formularz')?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'});}
+ if(path==='/ekipa')return <Crew/>;
  if(path==='/admin')return <Admin config={config}/>;
  return <>
   <a className="skip" href="#main">Przejdź do treści</a>

@@ -1,6 +1,6 @@
 Polityka prywatności Czysty Pomnik
 
-Wersja: 2026-10-16-v3. Dotyczy strony https://czystypomnik.waw.pl, zgłoszeń, kontaktu i świadczenia usług Czysty Pomnik.
+Wersja: 2026-10-19-v1. Dotyczy strony https://czystypomnik.waw.pl, zgłoszeń, kontaktu i świadczenia usług Czysty Pomnik.
 
 1. Administrator i kontakt
 
@@ -24,7 +24,7 @@ Nie wymagamy zgody marketingowej jako warunku zgłoszenia. Akceptacja regulaminu
 
 4. Odbiorcy danych
 
-Dostęp mają osoby obsługujące klientów i wykonujące usługę w zakresie potrzebnym do swoich zadań. Korzystamy z Vercel Inc. do hostingu strony i API oraz Supabase do bazy, prywatnego przechowywania zdjęć i uwierzytelniania panelu. Baza projektu i pliki znajdują się w regionie Frankfurt (eu-central-1). Korespondencję z klientami prowadzimy ręcznie przez skrzynkę Gmail dostarczaną przez Google. Do automatycznego wysyłania na firmową skrzynkę powiadomień o nowych zgłoszeniach korzystamy z Resend (Plus Five Five, Inc.). Powiadomienie zawiera dane kontaktowe klienta i informacje o wybranej usłudze oraz lokalizacji nagrobka, potrzebne obsłudze; nie zawiera załączonych zdjęć. Domena wysyłkowa Resend korzysta z regionu Ireland (eu-west-1). Dane mogą otrzymać także obsługa księgowa i prawna, banki oraz uprawnione organy, gdy wynika to z prawa lub jest niezbędne do realizacji sprawy. Nie sprzedajemy danych.
+Dostęp mają osoby obsługujące klientów i wykonujące usługę w zakresie potrzebnym do swoich zadań. Pracownik ekipy widzi wyłącznie przypisane sobie realizacje: termin, cmentarz, dane nagrobka i dojścia, zakres prac, wskazówki oraz zdjęcia. Nie otrzymuje dostępu do danych kontaktowych klienta, płatności, korespondencji ani konta koordynatora. Potwierdzenia przyjęcia, odmowy i zakończenia pracy oraz zdjęcia wykonania są zapisywane w historii obsługi. Jeśli koordynator uzupełni adres pracownika, e-mail z prośbą o potwierdzenie przypisania będzie wysyłany przez Resend; szczegóły lokalizacji pozostają w chronionym panelu. Korzystamy z Vercel Inc. do hostingu strony i API oraz Supabase do bazy, prywatnego przechowywania zdjęć i uwierzytelniania panelu. Baza projektu i pliki znajdują się w regionie Frankfurt (eu-central-1). Korespondencję z klientami prowadzimy ręcznie przez skrzynkę Gmail dostarczaną przez Google. Do automatycznego wysyłania na firmową skrzynkę powiadomień o nowych zgłoszeniach korzystamy z Resend (Plus Five Five, Inc.). Powiadomienie zawiera dane kontaktowe klienta i informacje o wybranej usłudze oraz lokalizacji nagrobka, potrzebne obsłudze; nie zawiera załączonych zdjęć. Domena wysyłkowa Resend korzysta z regionu Ireland (eu-west-1). Dane mogą otrzymać także obsługa księgowa i prawna, banki oraz uprawnione organy, gdy wynika to z prawa lub jest niezbędne do realizacji sprawy. Nie sprzedajemy danych.
 
 5. Przekazywanie poza Europejski Obszar Gospodarczy
 
@@ -34,7 +34,7 @@ Region bazy w Niemczech nie wyklucza przetwarzania przez globalnych dostawców i
 
 Niezakończone umową zgłoszenia przechowujemy do 90 dni od ostatniego kontaktu, chyba że konkretna reklamacja, spór lub obowiązek prawny uzasadnia dłuższe zachowanie. Zdjęcia w systemie usuwamy po 90 dniach od zakończenia usługi, chyba że są nadal potrzebne do wyjaśnienia sprawy. Dane niezbędne do udokumentowania zawartej umowy i rozliczeń przechowujemy przez czas wykonania oraz do upływu właściwych terminów przedawnienia roszczeń i obowiązków prawnych; co do zasady roszczenia przedawniają się po 3 lub 6 latach, z uwzględnieniem końca roku i zdarzeń zmieniających bieg terminu. Dokumentację podatkową przechowuje się co do zasady przez 5 lat od końca roku, w którym upłynął termin płatności podatku.
 
-Treść wysłanych powiadomień w kolejce aplikacji i zwykłą historię techniczną ograniczamy do 30 dni, z wyjątkiem materiału potrzebnego do sprawy lub aktualnej oferty. Liczniki ochrony formularza wygasają po 15 minutach. Retencja obejmuje również przegląd korespondencji i eksportów przez obsługę. Usunięcie w aplikacji nie usuwa natychmiast danych ze skrzynek odbiorców, dokumentów księgowych ani rotacyjnych kopii bezpieczeństwa dostawców; dostęp i dalsze użycie podlegają ich przeznaczeniu i odpowiednim zasadom retencji.
+Treść wysłanych powiadomień w kolejce aplikacji i zwykłą historię techniczną ograniczamy do 30 dni, z wyjątkiem materiału potrzebnego do sprawy lub aktualnej oferty. Liczniki ochrony formularza wygasają po 15 minutach. Zdjęcia dołączone przez ekipę podlegają tym samym zasadom retencji co pozostała dokumentacja usługi. Wygasłe sesje pracowników są okresowo usuwane. Retencja obejmuje również przegląd korespondencji i eksportów przez obsługę. Usunięcie w aplikacji nie usuwa natychmiast danych ze skrzynek odbiorców, dokumentów księgowych ani rotacyjnych kopii bezpieczeństwa dostawców; dostęp i dalsze użycie podlegają ich przeznaczeniu i odpowiednim zasadom retencji.
 
 7. Twoje prawa
 
@@ -49,4 +49,3 @@ Podanie danych jest dobrowolne, lecz dane kontaktowe, wybór usługi i informacj
 9. Cookies i aktualizacje
 
 Nie korzystamy z reklamowych cookies, Meta Pixel ani zewnętrznych narzędzi analitycznych. Szczegóły pamięci przeglądarki i sesji panelu opisuje Informacja o cookies. Aktualną politykę publikujemy w stopce; wersję właściwą dla oferty otrzymasz wraz z warunkami e-mailem. Zmiana polityki nie rozszerza automatycznie celów przetwarzania wcześniej zebranych danych.
-

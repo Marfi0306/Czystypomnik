@@ -11,7 +11,7 @@ export const packages = [
   { id: 'gold', name: 'Gold', price: 29900, deposit: 7500, weight: 1, description: 'Pielęgnacja z kwiatami i światłem pamięci.', features: ['Wszystko, co zawiera pakiet Silver', 'Chryzantema w doniczce 19 cm', 'Dwa nowe szklane znicze', 'Ustawienie i zapalenie zniczy'] },
   { id: 'platinum', name: 'Platinum', price: 44900, deposit: 15000, weight: 1, description: 'Pełna troska o miejsce pamięci.', features: ['Mycie i porządkowanie jak w Silver', 'Dwie chryzantemy', 'Stroik sztuczny', 'Trzy nowe szklane znicze'] },
 ] as const;
-export const money = (value: number) => new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN', maximumFractionDigits: 0 }).format(value / 100);
+export const money = (value: number) => new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN', minimumFractionDigits: 0, maximumFractionDigits: 2 }).format(value / 100);
 export const localDate = (now = new Date()) => new Intl.DateTimeFormat('sv-SE', { timeZone: 'Europe/Warsaw', year: 'numeric', month: '2-digit', day: '2-digit' }).format(now);
 export const dateLabel = (date: string) => new Intl.DateTimeFormat('pl-PL', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Warsaw' }).format(new Date(date + 'T12:00:00+01:00'));
 export const placesLabel = (n: number | null) => n === null ? 'Dostępny dzień' : `${n} ${n === 1 ? 'wolne miejsce' : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 'wolne miejsca' : 'wolnych miejsc'}`;
