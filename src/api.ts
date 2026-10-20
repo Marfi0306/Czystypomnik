@@ -1,5 +1,5 @@
-export async function api(path: string, data?: unknown, signal?:AbortSignal) {
-  const response = await fetch('/api'+path,{ signal,method:data===undefined?'GET':'POST',headers:data===undefined?{}:{'Content-Type':'application/json'},...(data===undefined?{}:{body:JSON.stringify(data)}) });
+export async function api(path: string, data?: unknown, signal?:AbortSignal,extraHeaders:Record<string,string>={}) {
+  const response = await fetch('/api'+path,{ signal,method:data===undefined?'GET':'POST',headers:{...(data===undefined?{}:{'Content-Type':'application/json'}),...extraHeaders},...(data===undefined?{}:{body:JSON.stringify(data)}) });
   const result = await response.json();
   if(!response.ok) throw new Error(result.error || 'SERVICE_UNAVAILABLE');
   return result;

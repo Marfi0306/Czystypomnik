@@ -13,6 +13,7 @@ import { termsStatement } from '../shared/consent';
 import {offerSchema,contractSchema} from '../shared/offers';
 import {runRetention} from './retention';
 import {crewRouter} from './crew';
+import {sendMetaLead} from './meta';
 const app = express();
 app.disable('x-powered-by');
 app.set('trust proxy', Number(process.env.TRUST_PROXY_HOPS || 0));
@@ -64,7 +65,8 @@ app.post('/api/orders',origin,wrap(async(req,res)=>{
   if(!await readySettings()) throw new Error('NOT_READY');
   await rate(req,'order'); const input=orderSchema.parse(req.body); const secret=uploadToken(input.idempotencyKey);
   const order=await rpc('reserve_order',{p_input:await withDeclarations(input),p_hash:hash(JSON.stringify(input)),p_upload_hash:hash(secret)});
-  res.status(201).json({...order,uploadToken:secret,emailQueued:process.env.MAIL_MODE==='resend'});
+  const marketingDelivery=await sendMetaLead(req,input.idempotencyKey);
+  res.status(201).json({...order,uploadToken:secret,emailQueued:process.env.MAIL_MODE==='resend',marketingDelivery:marketingDelivery.state});
 }));
 const upload=multer({ storage:multer.memoryStorage(),limits:{fileSize:3*1024*1024,files:1,fields:0} });
 app.post('/api/orders/:id/photos',origin,wrap(async(req,res,next)=>{

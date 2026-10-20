@@ -1,19 +1,38 @@
-# Meta Pixel — pomiar wysłania zgłoszenia
+# Meta Pixel i Conversions API
 
-Pixel ID przekazany przez właściciela: 1449807230414613. Integracja jest wyłączona, dopóki META_PIXEL_ID nie zawiera poprawnego identyfikatora. Nie wpisuj tu tokenu Conversions API. Nie włączono CAPI ani wysyłania danych formularza do Meta.
+Pixel ID: 1449807230414613. Publiczny pomiar wymaga META_PIXEL_ID i aktualnej zgody marketingowej v2. Poprzednia zgoda na sam Lead nie jest przenoszona. Bieżące dokumenty: 2026-10-20-v1. Odmowa nie blokuje formularza; panele i dokumenty nie są mierzone.
 
-Zdarzenie standardowe Lead jest wywoływane wyłącznie po poprawnej odpowiedzi API zapisującej publiczne zgłoszenie. Kliknięcie przycisku, walidacja i błąd sieci nie wywołują konwersji. Klucz próby formularza daje stały losowy eventID i blokuje duplikaty przy ponowieniu. Wysłanie zdjęć jest niezależne od zapisu zgłoszenia i nie wywołuje kolejnego Lead. Zamówienia dodawane ręcznie w panelu, podgląd i panel ekipy są wyłączone z pomiaru.
+| Zdarzenie | Moment |
+| --- | --- |
+| PageView | Raz na załadowaną stronę po zgodzie |
+| ViewContent | Co najmniej połowa karty pakietu w widoku; raz na pakiet i stronę |
+| PackageSelected (własne) | Wybór innego pakietu w karcie lub formularzu |
+| Search | Zakończenie wyszukiwania cmentarza; bez treści zapytania |
+| FormStart (własne) | Pierwsza zmiana formularza lub przejście z pierwszego kroku |
+| FormStep (własne) | Poprawne przejście do kroku 2 lub 3 |
+| FormSubmit (własne) | Próba wysłania kompletnego formularza |
+| FormError (własne) | Błąd walidacji lub zapisu; bez danych pól i komunikatu serwera |
+| Contact | Kliknięcie telefonu lub e-maila; bez danych kontaktowych |
+| Lead | Poprawna odpowiedź API po zapisaniu publicznego zgłoszenia |
 
-Nie ma PageView, automatycznego pomiaru kliknięć i formularzy ani advanced matching w kodzie. Do Meta nie przekazujemy telefonu, e-maila, danych z tablicy, lokalizacji grobu, treści uwag, zdjęć, kwot ani numeru zamówienia. Sam Pixel może przetwarzać IP, dane przeglądarki, adres strony i identyfikatory cookies — należy je wskazać w aktualnej polityce prywatności.
+Nie emitujemy fikcyjnych AddToCart, InitiateCheckout, AddPaymentInfo ani Purchase: zgłoszenie nie jest koszykiem, płatnością ani zawartą umową. Nie zbieramy automatycznie treści pól ani advanced matching. Do Meta nie wysyłamy danych kontaktowych, zapytania, cmentarza, lokalizacji, tablicy, uwag, zdjęć, numeru zamówienia ani kwot. Parametry są ograniczone do identyfikatora publicznego pakietu, numeru kroku i rodzaju kontaktu.
 
-Przed zgodą marketingową nie jest pobierany żaden zasób Meta. Odrzucenie ma taki sam przycisk jak akceptacja i nie blokuje formularza. Zgoda lub odmowa ma wersję i termin ważności 180 dni; zmiana Pixel ID wymaga nowej decyzji. Poprzednie zamknięcie informacyjnego bannera nie jest zgodą marketingową. Wycofanie w Cookies i prywatność blokuje nowe zdarzenia, usuwa kolejkę niepobranej biblioteki i usuwa dostępne cookies _fbp/_fbc. Nie wysyłamy zdarzeń z okresu sprzed zgody. SessionStorage przechowuje wyłącznie losowe klucze deduplikacji do końca sesji karty.
+Wywołanie fbq nie potwierdza odbioru w Meta. Przeglądarka, rozszerzenia i Meta mogą blokować wysyłkę. Brak PageView we wcześniejszej wersji wyjaśniał brak zdarzenia po samym wejściu i zgodzie; nie rozstrzygał wszystkich przypadków brakującego Lead.
 
-## Wdrożenie i weryfikacja
+## Uzupełniający Lead z serwera
 
-1. Potwierdź Pixel ID oraz własność właściwego źródła danych w Menedżerze zdarzeń.
-2. Zaktualizuj bieżące dokumenty cookies i prywatności w źródle i ustawieniach Supabase: dostawca Meta, cel reklamowy pomiaru, podstawa zgody, dane techniczne, cookies i transfery, możliwość wycofania. Usuń dotychczasowe bezwarunkowe zdanie o braku Meta Pixel. Zachowaj historyczne snapshoty.
-3. Ustaw META_PIXEL_ID dla produkcji Vercel i opublikuj dokładny przetestowany commit.
-4. W Menedżerze zdarzeń wyłącz automatyczne zaawansowane dopasowanie i automatyczne zdarzenia, jeśli są włączone. Nie dodawaj drugiej reguły Lead na kliknięcie przycisku.
-5. Sprawdź w przeglądarce odmowę i zgodę, brak ruchu do Meta przed zgodą, pojedynczy Lead po sukcesie i brak zdarzenia po błędzie. Użyj fikcyjnego zgłoszenia w izolowanym środowisku, a test do właściwego źródła danych wykonaj jawnie jako test.
+META_CONVERSIONS_API_TOKEN jest sekretem backendu. Dodaj go w Vercel dla Production i wdroż ponownie. META_GRAPH_API_VERSION domyślnie wynosi v26.0, zgodnie z aktualnym oficjalnym Business SDK.
 
-Konfiguracja produkcyjna wymaga META_PIXEL_ID=1449807230414613 i bieżącego pakietu dokumentów 2026-10-19-v2. Dokumentacja dostawcy: https://developers.facebook.com/docs/meta-pixel/implementation/conversion-tracking/ oraz https://developers.facebook.com/docs/meta-pixel/implementation/gdpr/ (przy przygotowaniu serwer dokumentacji zwracał 429).
+CAPI działa po walidacji i skutecznym reserve_order, wyłącznie dla publicznego zgłoszenia z nagłówkiem aktualnej zgody x-marketing-consent: v2. Oba kanały używają tego samego event_id cp-lead-<losowy klucz próby> do deduplikacji. Serwer wysyła techniczny IP żądania, User-Agent i poprawne _fbp/_fbc, jeśli występują. Nie wysyła nazwiska, telefonu ani e-maila. Używa req.ip zgodnie z TRUST_PROXY_HOPS, nie dowolnego X-Forwarded-For.
+
+Brak tokenu wyłącza CAPI; odmowa wyłącza nagłówek zgody. Limit wywołania wynosi 3,5 sekundy. Awaria nie cofa zapisanego zgłoszenia. CAPI nie ma trwałej kolejki ponowień. Odpowiedź zawiera techniczny marketingDelivery: disabled/no_consent/sent/failed; błędy są logowane bez tokenu i danych klienta. Powtórzony zapis używa tego samego event_id.
+
+Do jawnego testu można tymczasowo ustawić META_TEST_EVENT_CODE z zakładki Testowanie zdarzeń Meta. Usuń zmienną po teście. Nie wywołuj produkcyjnego Lead ręcznie bez zapisania zgłoszenia ani fikcyjnego Purchase.
+
+## Zgoda i kontrola
+
+Przed zgodą nie pobieramy zasobów Meta. Decyzja v2 obowiązuje do 180 dni. Wycofanie blokuje pomiar, czyści niewysłaną kolejkę SDK i dostępne _fbp/_fbc. Nie odtwarzamy zdarzeń sprzed zgody. Klucze deduplikacji Lead w sessionStorage są losowe i znikają z sesją karty.
+
+Testy obejmują odmowę, wycofanie w innej karcie, starą zgodę, pojedynczy PageView, deduplikację Lead, dozwolone parametry i CAPI. Izolowany test przeglądarkowy używa prawdziwego SDK z lokalnym odbiornikiem. Odbiór w Meta wymaga osobnego potwierdzenia w Menedżerze zdarzeń.
+
+Źródła: https://help.shopify.com/en/manual/promoting-marketing/analyze-marketing/meta-data-sharing oraz https://github.com/facebook/facebook-python-business-sdk.
