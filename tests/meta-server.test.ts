@@ -4,7 +4,7 @@ import type {Request} from 'express';
 import {sendMetaLead,sendMetaEvents} from '../server/meta';
 import {marketingBatchSchema} from '../shared/marketing';
 const id='b5d8456d-427b-4d8e-a834-117a1276ddbe';
-function request(consent?:string){return {ip:'192.0.2.1',cookies:{_fbp:'fb.1.1792512000000.123456',_fbc:'invalid-cookie'},get:(name:string)=>name==='x-marketing-consent'?consent:name==='user-agent'?'Fixture Browser':''} as unknown as Request;}
+function request(consent?:string,testCode?:string){return {ip:'192.0.2.1',cookies:{_fbp:'fb.1.1792512000000.123456',_fbc:'invalid-cookie'},get:(name:string)=>name==='x-marketing-consent'?consent:name==='x-meta-test-code'?testCode:name==='user-agent'?'Fixture Browser':''} as unknown as Request;}
 test('CAPI wymaga tokenu i aktualnej zgody; przesyła tylko Lead i dane techniczne z identycznym event_id',async()=>{
  const before={...process.env};const native=globalThis.fetch;const calls:{url:string;options:RequestInit}[]=[];
  try{
@@ -33,6 +33,8 @@ test('kanał czynności waliduje pola i nie pozwala wytworzyć Lead ani przesła
   assert.equal((await sendMetaEvents(request(),events)).state,'no_consent');assert.equal(calls.length,0);
   assert.equal((await sendMetaEvents(request('v2'),events)).state,'sent');assert.equal(calls[0].data[0].event_id,id);assert.equal(calls[0].data[1].event_name,'ViewContent');assert.deepEqual(calls[0].data[1].custom_data,{content_ids:['gold'],content_type:'product'});
   assert.equal((await sendMetaEvents(request('v2'),[{name:'Lead',id,data:{}}] as any)).state,'failed');assert.equal(calls.length,1);
+  assert.equal((await sendMetaEvents(request('v2','TEST31731'),events)).state,'sent');assert.equal(calls[1].test_event_code,'TEST31731');
+  assert.equal((await sendMetaEvents(request('v2','arbitrary-private-data'),events)).state,'failed');assert.equal(calls.length,2);
   globalThis.fetch=async()=>Response.json({events_received:1});assert.equal((await sendMetaEvents(request('v2'),events)).state,'failed');
  }finally{globalThis.fetch=native;for(const key of Object.keys(process.env))if(!(key in before))delete process.env[key];Object.assign(process.env,before);}
 });

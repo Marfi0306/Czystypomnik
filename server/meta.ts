@@ -10,10 +10,12 @@ export async function sendMetaLead(req:Request,submissionId:string):Promise<Meta
 }
 export async function sendMetaEvents(req:Request,events:MarketingEvent[]):Promise<MetaDelivery>{
  const parsed=marketingBatchSchema.safeParse({events});if(!parsed.success)return {state:'failed'};
- return dispatch(req,parsed.data.events.map(event=>({event_name:event.name,event_id:event.id,...(Object.keys(event.data).length?{custom_data:event.data}:{})})));
+ const code=req.get('x-meta-test-code');
+ if(code&&!/^TEST\d{1,20}$/.test(code))return {state:'failed'};
+ return dispatch(req,parsed.data.events.map(event=>({event_name:event.name,event_id:event.id,...(Object.keys(event.data).length?{custom_data:event.data}:{})})),code);
 }
 type MetaEvent={event_name:string;event_id:string;custom_data?:Record<string,unknown>};
-async function dispatch(req:Request,events:MetaEvent[]):Promise<MetaDelivery>{
+async function dispatch(req:Request,events:MetaEvent[],testCode?:string):Promise<MetaDelivery>{
  const token=process.env.META_CONVERSIONS_API_TOKEN;const pixel=process.env.META_PIXEL_ID;
  const report=(state:MetaDelivery['state'],details:Record<string,unknown>={})=>{console.info('META_CAPI_DELIVERY',{state,events:events.map(e=>({name:e.event_name,id:e.event_id})),...details});return {state};};
  if(!token||!pixel||!/^\d{5,25}$/.test(pixel)||process.env.APP_MODE!=='production')return report('disabled');
@@ -25,7 +27,7 @@ async function dispatch(req:Request,events:MetaEvent[]):Promise<MetaDelivery>{
   for(const key of ['fbp','fbc']){const value=req.cookies?.['_'+key];if(typeof value==='string'&&/^fb\.\d+\.\d{10,16}\.[A-Za-z0-9_-]{1,500}$/.test(value))user[key]=value;}
   const version=/^v\d+\.0$/.test(process.env.META_GRAPH_API_VERSION||'')?process.env.META_GRAPH_API_VERSION!:'v26.0';
   const body:Record<string,unknown>={data:events.map(event=>({...event,event_time:Math.floor(Date.now()/1000),action_source:'website',event_source_url:origin.origin+'/',user_data:user}))};
-  if(process.env.META_TEST_EVENT_CODE)body.test_event_code=process.env.META_TEST_EVENT_CODE;
+  if(testCode||process.env.META_TEST_EVENT_CODE)body.test_event_code=testCode||process.env.META_TEST_EVENT_CODE;
   const response=await fetch(`https://graph.facebook.com/${version}/${pixel}/events`,{method:'POST',headers:{authorization:'Bearer '+token,'content-type':'application/json'},body:JSON.stringify(body),signal:AbortSignal.timeout(3500)});
   const result=await response.json();
   if(!response.ok||result.events_received!==events.length)return report('failed',{status:response.status,code:typeof result.error?.code==='number'?result.error.code:undefined});

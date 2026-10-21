@@ -40,3 +40,5 @@ Testy obejmują odmowę, wycofanie w innej karcie, starą zgodę, pojedynczy Pag
 ## Diagnostyka odbioru
 
 Adres /?meta_debug=1 pokazuje po zgodzie potwierdzenia odpowiedzi Meta dla czynności z tej karty. Stan sent wymaga HTTP 2xx i events_received równemu liczbie zdarzeń paczki. Jest to potwierdzenie przyjęcia przez API, nie gwarancja przypisania do reklamy ani wyświetlenia w panelu. Lead pokazuje wynik rzeczywistego POST /api/orders, bez osobnego wywoływania konwersji. W produkcji nie ustawiamy globalnie META_TEST_EVENT_CODE; zwykłe zdarzenia bez tego kodu nie należą do testu serwerowego TEST31731.
+
+Jawny test czynności: /?meta_debug=1&meta_test=TEST31731. Klient przesyła ograniczony kod TEST<cyfry> nagłówkiem tylko do kanału czynności; serwer waliduje go i umieszcza jako test_event_code. Nie zmienia globalnego środowiska ani produkcyjnych zgłoszeń Lead i nie pozwala wygenerować Lead przez publiczne API czynności. Po teście używaj zwykłego adresu strony.

@@ -26,7 +26,9 @@ async function deliver(events:MarketingEvent[],attempt:number){
  const timeout=setTimeout(()=>controller.abort(),6000);
  let retry=false;
  try{
-  const response=await fetch('/api/marketing/events',{method:'POST',headers:{'content-type':'application/json',...marketingRequestHeaders()},body:JSON.stringify({events}),credentials:'same-origin',keepalive:true,signal:controller.signal});
+  const params=new URLSearchParams(window.location.search);const code=params.get('meta_test');
+  const testHeaders:Record<string,string>=params.get('meta_debug')==='1'&&code&&/^TEST\d{1,20}$/.test(code)?{'x-meta-test-code':code}:{};
+  const response=await fetch('/api/marketing/events',{method:'POST',headers:{'content-type':'application/json',...marketingRequestHeaders(),...testHeaders},body:JSON.stringify({events}),credentials:'same-origin',keepalive:true,signal:controller.signal});
   const result=await response.json();const state=response.ok&&['sent','disabled','no_consent','failed'].includes(result.state)?result.state:'failed';
   if(marketingConsent()?.marketing===true)for(const event of events)reportMarketingDelivery(event.name,state,event.id);
   retry=state==='failed'&&response.status!==429&&response.status!==403;
