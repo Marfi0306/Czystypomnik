@@ -14,3 +14,12 @@ test('API blokuje obce pochodzenie i nieuprawniony harmonogram',async()=>{
  const r=await fetch(base+'/api/orders',{method:'POST',headers:{origin:'https://example.invalid','content-type':'application/json'},body:'{}'});assert.equal(r.status,403);
  for(const route of ['outbox','retention','owner-notifications']){const job=await fetch(base+'/api/internal/'+route,{method:'POST'});assert.equal(job.status,401);}
 });
+test('publiczne API pomiaru odrzuca obce pochodzenie, brak zgody, Lead i dane pól formularza',async()=>{
+ const events=[{name:'PageView',id:'cp-b5d8456d-427b-4d8e-a834-117a1276ddbe',data:{}}];
+ const post=(origin:string,body:unknown,consent?:string)=>fetch(base+'/api/marketing/events',{method:'POST',headers:{origin,'content-type':'application/json',...(consent?{'x-marketing-consent':consent}:{})},body:JSON.stringify(body)});
+ assert.equal((await post('https://example.invalid',{events},'v2')).status,403);
+ assert.equal((await post(base,{events})).status,403);
+ assert.equal((await post(base,{events:[{...events[0],name:'Lead'}]},'v2')).status,400);
+ assert.equal((await post(base,{events:[{...events[0],data:{phone:'private'}}]},'v2')).status,400);
+ assert.equal((await post(base,{events},'v2')).status,503);
+});

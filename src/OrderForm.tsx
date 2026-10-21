@@ -4,7 +4,7 @@ import { demoDays } from './demo';
 import { api,errorText } from './api';
 import { termsStatement } from '../shared/consent';
 import {track} from './analytics';
-import {marketingRequestHeaders} from './marketing';
+import {marketingRequestHeaders,reportMarketingDelivery} from './marketing';
 import DayCalendar from './DayCalendar';
 export default function OrderForm({config,selected,onSelect,manual=false,onDone}:{config:Config;selected:string;onSelect:(v:string)=>void;manual?:boolean;onDone?:()=>void}) {
  const [uncertain,setUncertain]=useState(false); const [submitted,setSubmitted]=useState<OrderInput|null>(null); const [step,setStep]=useState(0); const [days,setDays]=useState<Day[]>([]); const [loading,setLoading]=useState(false); const [error,setError]=useState(''); const [errors,setErrors]=useState<Record<string,string>>({}); const [busy,setBusy]=useState(false); const [demoDone,setDemoDone]=useState(false); const [receipt,setReceipt]=useState<{number:number;id:string;uploadToken:string}|null>(null); const [photoError,setPhotoError]=useState(''); const [files,setFiles]=useState<File[]>([]); const [source,setSource]=useState('phone');
@@ -43,6 +43,7 @@ export default function OrderForm({config,selected,onSelect,manual=false,onDone}
    track(!manual,'form_submitted',{submissionId:attempt.current.key});
    const result=await api(manual?'/admin/orders':'/orders',manual?{order:input,source}:input,undefined,manual?{}:marketingRequestHeaders());
    setSubmitted(input);setUncertain(false);setReceipt(result);track(!demo&&!manual,'order_saved',{orderNumber:result.number,submissionId:attempt.current.key});
+   if(!manual)reportMarketingDelivery('Lead',result.marketingDelivery||'failed','cp-lead-'+attempt.current.key);
    if(!manual)try{await uploadPhotos(result.id,result.uploadToken);}catch{setPhotoError('Zgłoszenie zapisano. Zdjęcia nie zostały dodane — możesz ponowić ich wysłanie.');}
    onDone?.();
   }catch(e){track(!manual,'form_failed');setError(errorText(e));if(e instanceof Error && ['FULL','DOCUMENTS_CHANGED','VALIDATION_ERROR','PACKAGE_CHANGED','NOT_READY','RATE_LIMIT'].includes(e.message)){attempt.current={key:crypto.randomUUID()};setUncertain(false);}else setUncertain(true);}

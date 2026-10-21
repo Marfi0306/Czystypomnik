@@ -13,7 +13,8 @@ import { termsStatement } from '../shared/consent';
 import {offerSchema,contractSchema} from '../shared/offers';
 import {runRetention} from './retention';
 import {crewRouter} from './crew';
-import {sendMetaLead} from './meta';
+import {sendMetaLead,sendMetaEvents} from './meta';
+import {marketingBatchSchema} from '../shared/marketing';
 const app = express();
 app.disable('x-powered-by');
 app.set('trust proxy', Number(process.env.TRUST_PROXY_HOPS || 0));
@@ -67,6 +68,15 @@ app.post('/api/orders',origin,wrap(async(req,res)=>{
   const order=await rpc('reserve_order',{p_input:await withDeclarations(input),p_hash:hash(JSON.stringify(input)),p_upload_hash:hash(secret)});
   const marketingDelivery=await sendMetaLead(req,input.idempotencyKey);
   res.status(201).json({...order,uploadToken:secret,emailQueued:process.env.MAIL_MODE==='resend',marketingDelivery:marketingDelivery.state});
+}));
+app.post('/api/marketing/events',origin,wrap(async(req,res)=>{
+ // No arbitrary event names, customer fields, source URLs or client-created Leads.
+ const {events}=marketingBatchSchema.parse(req.body);
+ if(req.get('x-marketing-consent')!=='v2'){res.status(403).json({error:'MARKETING_CONSENT_REQUIRED'});return;}
+ if(!await readySettings())throw new Error('NOT_READY');
+ // A separate ten-request / fifteen-second budget never consumes order capacity or order rate limits.
+ await rate(req,'meta:'+Math.floor(Date.now()/15000));
+ const delivery=await sendMetaEvents(req,events);res.json({state:delivery.state});
 }));
 const upload=multer({ storage:multer.memoryStorage(),limits:{fileSize:3*1024*1024,files:1,fields:0} });
 app.post('/api/orders/:id/photos',origin,wrap(async(req,res,next)=>{

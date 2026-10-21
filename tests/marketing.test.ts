@@ -4,6 +4,8 @@ import {configureMarketing,marketingConsent,saveMarketingConsent,trackSavedLead,
 class Storage{data=new Map<string,string>();getItem(k:string){return this.data.get(k)??null;}setItem(k:string,v:string){this.data.set(k,v);}removeItem(k:string){this.data.delete(k);}}
 const local=new Storage(),session=new Storage();const scripts:any[]=[];const cookies:string[]=[];let storageListener:(e:any)=>void;const win:any={location:{pathname:'/',hostname:'czystypomnik.waw.pl'},dispatchEvent:()=>true,addEventListener:(name:string,fn:any)=>{if(name==='storage')storageListener=fn;}};
 Object.assign(globalThis,{window:win,localStorage:local,sessionStorage:session,document:{getElementById:()=>scripts[0],createElement:()=>({}),head:{appendChild:(s:any)=>scripts.push(s)},set cookie(value:string){cookies.push(value);}}});
+const serverCalls:{url:string;options:RequestInit}[]=[];
+globalThis.fetch=async(url,options)=>{serverCalls.push({url:String(url),options:options!});return Response.json({state:'sent'});};
 test('stara zgoda i odmowa nie pobierają Meta; nowa zgoda wysyła jeden PageView i jeden Lead po zapisie',()=>{
  local.setItem('cp_marketing_consent_v1',JSON.stringify({version:1,pixelId:'123456789012345',marketing:true,at:Date.now()}));
  configureMarketing('123456789012345');assert.equal(marketingConsent(),null);trackSavedLead('request-0000000001');assert.equal(scripts.length,0);assert.equal(win.fbq,undefined);
@@ -13,6 +15,16 @@ test('stara zgoda i odmowa nie pobierają Meta; nowa zgoda wysyła jeden PageVie
  const calls:any[][]=[];win.fbq.callMethod=(...args:any[])=>calls.push(args);win.fbq.queue=[];
  trackSavedLead('request-0000000002');trackSavedLead('request-0000000002');const leads=calls.filter(c=>c[0]==='trackSingle'&&c[2]==='Lead');assert.equal(leads.length,1);assert.deepEqual(leads[0],['trackSingle','123456789012345','Lead',{}, {eventID:'cp-lead-request-0000000002'}]);
  saveMarketingConsent(false);trackSavedLead('request-0000000003');assert.equal(calls.filter(c=>c[0]==='trackSingle'&&c[2]==='Lead').length,1);assert.ok(calls.some(c=>c[0]==='consent'&&c[1]==='revoke'));assert.ok(cookies.some(c=>c.startsWith('_fbp=;')));
+});
+test('kanały przeglądarki i serwera używają tych samych ID; odmowa i wycofanie blokują dodatkową wysyłkę',async()=>{
+ const calls:any[][]=[];win.fbq.callMethod=(...args:any[])=>calls.push(args);win.location.pathname='/';configureMarketing('777777777777777');saveMarketingConsent(false);
+ const startCount=serverCalls.length;trackMarketingAction('form_started');await new Promise(resolve=>setTimeout(resolve,180));assert.equal(serverCalls.length,startCount);
+ saveMarketingConsent(true);trackMarketingAction('package_selected',{packageId:'platinum',email:'private@example.invalid'} as any);
+ await new Promise(resolve=>setTimeout(resolve,180));assert.equal(serverCalls.length,startCount+1);
+ const request=serverCalls.at(-1)!;assert.equal(request.url,'/api/marketing/events');assert.equal((request.options.headers as any)['x-marketing-consent'],'v2');
+ const {events}=JSON.parse(String(request.options.body));assert.deepEqual(events.map((e:any)=>e.name),['PageView','PackageSelected']);
+ for(const event of events){const browser=calls.find(c=>c[2]===event.name);assert.equal(browser?.[4].eventID,event.id);}assert.ok(!String(request.options.body).includes('private@example.invalid'));
+ trackMarketingAction('form_step',{step:2});saveMarketingConsent(false);await new Promise(resolve=>setTimeout(resolve,180));assert.equal(serverCalls.length,startCount+1);
 });
 test('nie odtwarza zdarzeń sprzed zgody, nie mierzy paneli i nie wysyła bez poprawnego identyfikatora',()=>{
  const calls:any[][]=[];win.fbq.callMethod=(...args:any[])=>calls.push(args);saveMarketingConsent(true);assert.equal(calls.filter(c=>c[0]==='trackSingle'&&c[2]==='Lead').length,0);

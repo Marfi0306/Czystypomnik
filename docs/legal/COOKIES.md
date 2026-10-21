@@ -1,6 +1,6 @@
 Informacja o cookies i pamięci przeglądarki
 
-Wersja: 2026-10-20-v1.
+Wersja: 2026-10-21-v1.
 
 1. Strona i formularz
 
@@ -26,7 +26,7 @@ Dostawca: Meta Platforms Ireland Limited. Cel: pomiar wizyt (PageView), oglądan
 
 Po zgodzie dostawca może zapisywać _fbp (identyfikacja przeglądarki na potrzeby pomiaru reklam) i _fbc (identyfikator kliknięcia reklamy, jeśli występuje). Typowy okres tych cookies to do 3 miesięcy, zależnie od działania narzędzia i przeglądarki; możesz usunąć je wcześniej. Techniczne dane połączenia obejmują m.in. IP, przeglądarkę, adres strony, stronę odsyłającą i identyfikatory cookies. Polityka dostawcy: https://www.facebook.com/privacy/policies/cookies/ i https://www.facebook.com/privacy/policy/.
 
-Własny klucz sessionStorage cp_meta_lead_ z losowym identyfikatorem zapobiega powieleniu konwersji. Jest tworzony wyłącznie przy zgodzie i przechowywany do końca sesji karty. Nie zawiera treści zgłoszenia ani danych kontaktowych. Nie stosujemy awaryjnego pixela noscript. Po aktywowaniu połączenia serwerowego Conversions API serwer może dodatkowo przesłać wyłącznie Lead po zapisie publicznego zgłoszenia i aktualnej zgodzie marketingowej. Używa tego samego losowego identyfikatora zdarzenia co Pixel do deduplikacji. Przekazuje adres IP połączenia, informacje o przeglądarce, adres strony głównej i poprawne identyfikatory _fbp/_fbc, jeśli występują; nie przekazuje danych kontaktowych ani treści zgłoszenia. Kanał serwerowy nie obchodzi odmowy. Brak tokenu wyłącza tę dodatkową wysyłkę.
+Własny klucz sessionStorage cp_meta_lead_ z losowym identyfikatorem zapobiega powieleniu konwersji. Jest tworzony wyłącznie przy zgodzie i przechowywany do końca sesji karty. Nie zawiera treści zgłoszenia ani danych kontaktowych. Nie stosujemy awaryjnego pixela noscript. Po aktywowaniu połączenia serwerowego Conversions API serwer może dodatkowo przesłać wymienione wyżej zdarzenia rzeczywistych czynności po aktualnej zgodzie marketingowej. Lead jest wysyłany wyłącznie po zapisie publicznego zgłoszenia. Używa tego samego losowego identyfikatora zdarzenia co Pixel do deduplikacji. Przekazuje adres IP połączenia, informacje o przeglądarce, adres strony głównej i poprawne identyfikatory _fbp/_fbc, jeśli występują; nie przekazuje danych kontaktowych ani treści zgłoszenia. Kanał serwerowy nie obchodzi odmowy. Brak tokenu wyłącza tę dodatkową wysyłkę. Wynik wysyłki, nazwa i losowy identyfikator zdarzenia są zapisywane w technicznych logach hostingu do diagnostyki, bez treści formularza i danych kontaktowych.
 
 5. Hosting i ustawienia
 

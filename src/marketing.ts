@@ -1,17 +1,47 @@
 // Only explicit, current marketing consent allows loading any Meta resource.
+import type {MarketingEvent} from '../shared/marketing';
 const consentKey='cp_marketing_consent_v2';
 const maxAge=180*86400000;
 type Consent={version:2;pixelId:string;marketing:boolean;at:number};
 type Fbq=((...args:unknown[])=>void)&{queue?:unknown[][];callMethod?:(...args:unknown[])=>void;push?:Fbq;loaded?:boolean;version?:string};
 let pixelId='';let initialized='';let currentChoice:Consent|undefined;let listening=false;const sent=new Set<string>();const viewedPixels=new Set<string>();
 const publicPage=()=>window.location.pathname==='/';
+let pending:MarketingEvent[]=[];let flushTimer:ReturnType<typeof setTimeout>|undefined;
+const activeRequests=new Set<AbortController>();
+const pageViewIds=new Map<string,string>();
+export function reportMarketingDelivery(name:string,state:string,id?:string){window.dispatchEvent(new CustomEvent('cp:marketing-delivery',{detail:{name,state,id}}));}
+function queueServer(name:string,data:Record<string,unknown>,id:string){
+ pending.push({name,data,id} as MarketingEvent);
+ if(!flushTimer)flushTimer=setTimeout(flushServer,150);
+}
+function flushServer(){
+ flushTimer=undefined;
+ if(!publicPage()||marketingConsent()?.marketing!==true){pending=[];return;}
+ const events=pending.splice(0,10);if(!events.length)return;
+ void deliver(events,0);if(pending.length)flushTimer=setTimeout(flushServer,150);
+}
+async function deliver(events:MarketingEvent[],attempt:number){
+ if(!publicPage()||marketingConsent()?.marketing!==true)return;
+ const controller=new AbortController();activeRequests.add(controller);
+ const timeout=setTimeout(()=>controller.abort(),6000);
+ let retry=false;
+ try{
+  const response=await fetch('/api/marketing/events',{method:'POST',headers:{'content-type':'application/json',...marketingRequestHeaders()},body:JSON.stringify({events}),credentials:'same-origin',keepalive:true,signal:controller.signal});
+  const result=await response.json();const state=response.ok&&['sent','disabled','no_consent','failed'].includes(result.state)?result.state:'failed';
+  if(marketingConsent()?.marketing===true)for(const event of events)reportMarketingDelivery(event.name,state,event.id);
+  retry=state==='failed'&&response.status!==429&&response.status!==403;
+ }catch{retry=true;if(marketingConsent()?.marketing===true)for(const event of events)reportMarketingDelivery(event.name,'failed',event.id);}
+ finally{clearTimeout(timeout);activeRequests.delete(controller);}
+ // Identical IDs let Meta deduplicate a retry even if its first acknowledgement was lost.
+ if(retry&&attempt===0)setTimeout(()=>{void deliver(events,1);},1200);
+}
 export function marketingPixelId(){return pixelId;}
 export function marketingConsent():Consent|null{try{const c=currentChoice||JSON.parse(localStorage.getItem(consentKey)||'null');return c?.version===2&&c.pixelId===pixelId&&typeof c.marketing==='boolean'&&typeof c.at==='number'&&c.at<=Date.now()&&Date.now()-c.at<maxAge?c:null;}catch{return null;}}
 function notify(){window.dispatchEvent(new Event('cp:marketing-consent'));}
 function removeCookies(){const host=window.location.hostname;const domains=['',host,'.'+host];const parts=host.split('.');if(parts.length>2)domains.push('.'+parts.slice(1).join('.'));for(const name of ['_fbp','_fbc'])for(const domain of domains)document.cookie=`${name}=; Max-Age=0; Path=/; SameSite=Lax${domain?'; Domain='+domain:''}`;}
 function fbq(){return (window as Window&{fbq?:Fbq}).fbq;}
-function revoke(){const q=fbq();if(q?.queue&&!q.callMethod){q.queue=[];viewedPixels.delete(initialized);initialized='';}q?.('consent','revoke');removeCookies();}
-function pageView(){if(viewedPixels.has(pixelId))return;const send=fbq();if(!send)return;send('trackSingle',pixelId,'PageView');viewedPixels.add(pixelId);}
+function revoke(){pending=[];if(flushTimer)clearTimeout(flushTimer);flushTimer=undefined;for(const controller of activeRequests)controller.abort();const q=fbq();if(q?.queue&&!q.callMethod){q.queue=[];viewedPixels.delete(initialized);initialized='';}q?.('consent','revoke');removeCookies();}
+function pageView(){if(viewedPixels.has(pixelId))return;const send=fbq();if(!send)return;const id=pageViewIds.get(pixelId)||'cp-'+crypto.randomUUID();pageViewIds.set(pixelId,id);send('trackSingle',pixelId,'PageView',{}, {eventID:id});viewedPixels.add(pixelId);queueServer('PageView',{},id);}
 function start(){
  if(!pixelId||!publicPage()||marketingConsent()?.marketing!==true)return;
  if(initialized===pixelId){fbq()?.('consent','grant');pageView();return;}
@@ -56,6 +86,6 @@ export function trackMarketingAction(action:MarketingAction,data:MarketingData={
   if(action==='cemetery_searched')standard=true;
   if(data.submissionId&&/^[-a-zA-Z0-9]{10,100}$/.test(data.submissionId)&&['form_started','form_step','form_submitted'].includes(action))dedup=action+':'+data.submissionId+':'+(data.step||'');
   if(dedup&&sent.has(dedup))return;
-  start();const send=fbq();if(!send)return;send(standard?'trackSingle':'trackSingleCustom',pixelId,name,params,{eventID:'cp-'+crypto.randomUUID()});if(dedup)sent.add(dedup);
+  start();const send=fbq();if(!send)return;const id='cp-'+crypto.randomUUID();send(standard?'trackSingle':'trackSingleCustom',pixelId,name,params,{eventID:id});queueServer(name,params,id);if(dedup)sent.add(dedup);
  }catch{/* Optional measurement must never interrupt the page. */}
 }
